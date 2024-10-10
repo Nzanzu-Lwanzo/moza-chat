@@ -1,0 +1,53 @@
+@import "./mixins";
+@import "./variables";
+
+.box__shadow {
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease;
+}
+
+.box__shadow:hover{
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+}
+
+.icon__button {
+   @include center;
+    background-color: transparent;
+    height: 35px;
+    width: 35px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+
+.no__state__button {
+    padding: .8rem;
+    font-size: .8rem;
+    border-radius: 3px;
+    background-color: $accent;
+    color: #FFF;
+    width: fit-content;
+    cursor: pointer;
+    transition: .2s ease-out;
+    border: 1px solid $accent;
+
+    &:hover {
+        background-color: transparent;
+        color: $accent;
+    }
+}
+
+.no__state__button__reverse {
+    padding: .8rem;
+    border-radius: 3px;
+    background-color: transparent;
+    color: $accent;
+    border: 1px solid $accent;
+    width: fit-content;
+    transition: .2s ease-out;
+
+    &:hover {
+        background-color: $accent;
+        color: #FFF;
+    }
+}

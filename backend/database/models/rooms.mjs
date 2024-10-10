@@ -19,6 +19,11 @@ const RoomSchema = new mongoose.Schema(
 
     picture: String,
 
+    messages : [{
+      type : mongoose.SchemaTypes.ObjectId,
+      ref : 'Message'
+    }],
+
     participants: [
       {
         type: mongoose.SchemaTypes.ObjectId,

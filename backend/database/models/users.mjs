@@ -17,14 +17,18 @@ const UserSchema = new mongoose.Schema({
       maxLengthName,
       `Le nom doit avoir une longueur de maximum : ${maxLengthName}`,
     ],
+    unique: true,
   },
 
-  email: String,
+  email: {
+    type: String,
+    unique: true,
+  },
 
   password: {
     type: String,
     required: [true, "Vous devez fournir un mot de passe"],
-    set:  function (value) {
+    set: function (value) {
       return generate(value);
     },
   },

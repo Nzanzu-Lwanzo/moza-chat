@@ -1,0 +1,230 @@
+@import "../imports";
+
+.sidebar__menu .menu__elts {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 1rem;
+  width: 100%;
+  justify-content: center;
+  padding: 1rem 0.5rem;
+  height: 100%;
+  flex: 9;
+
+  li {
+    .wrap__content.active,
+    .wrap__content:hover {
+      background-color: $accent;
+    }
+
+    .wrap__content {
+      width: 100%;
+      text-decoration: none;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.5rem 0.8rem;
+      border-radius: 2px;
+      font-size: 0.8rem;
+      background-color: darken($color: $dark, $amount: 5);
+      cursor: pointer;
+      transition: 0.1s ease-in;
+    }
+  }
+}
+
+.sidebar__menu .sidebar__bottom__actions {
+  min-height: 50px;
+
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  justify-content: flex-end;
+  border-top: 2px solid darken($color: $dark, $amount: 3);
+  padding: 0.5rem 1rem;
+
+  button:has(svg) {
+    @extend .icon__button;
+    background-color: darken($color: $dark, $amount: 10);
+  }
+
+  button:hover {
+    color: #fff;
+    background-color: $accent;
+  }
+}
+
+.page__content {
+  padding: $page__content__padding;
+  box-sizing: border-box;
+}
+
+.page__content__no__splitted {
+  height: 100%;
+  width: 100%;
+  background-color: #fff;
+  border-radius: 4px;
+  @extend .box__shadow;
+  padding: 1rem;
+}
+
+.page__content__splitted {
+  height: 100%;
+
+  display: grid;
+  grid-template-columns: 70% 30%;
+  gap: 1rem;
+
+  .main__content {
+    width: 100%;
+    background-color: #fff;
+    border-radius: 4px;
+    min-height: 80vh;
+    @extend .box__shadow;
+    padding: 1rem;
+
+    min-height: 80vh;
+
+    .projects__timeline {
+      height: 100%;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 1rem;
+      position: relative;
+
+      &::before {
+        content: "";
+        display: block;
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        background-color: $accent;
+        width: 5px;
+        border-radius: 20px;
+      }
+
+      .card__container {
+        padding: 1rem 2rem;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        justify-content: flex-start;
+        gap: 0.6rem;
+        min-height: 200px;
+
+        &::before {
+          content: "";
+          display: block;
+          width: 30px;
+          height: 30px;
+          border-radius: 50%;
+          background-color: $accent;
+          left: -12.5px;
+          top: 35%;
+          position: absolute;
+        }
+
+        .infos-and-actions {
+          display: flex;
+          align-items: center;
+          justify-content: flex-start;
+          flex-wrap: wrap;
+          gap: 0.5rem;
+
+          span[class^="cell"] {
+            font-size: 0.7rem;
+          }
+
+          .cell {
+            @include transp($color: $accent);
+            display: inline-block;
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-weight: bold;
+
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 0.5rem;
+          }
+
+          .action__btn {
+            @include circle__btn;
+            cursor: pointer;
+          }
+        }
+      }
+
+      .card {
+        width: 100%;
+        height: 100%;
+        padding: 1rem;
+        border-radius: 4px;
+        text-decoration: none;
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.5rem;
+        justify-content: flex-start;
+
+        .project__main__infos {
+          display: flex;
+          align-items: center;
+          justify-content: flex-start;
+          gap: 0.5rem;
+        }
+
+        h2 {
+          font-size: 1.2rem;
+          font-weight: bold;
+        }
+
+        .project__info__elt {
+          font-size: 0.7rem;
+          display: flex;
+          align-items: center;
+          justify-content: flex-start;
+          gap: 0.2rem;
+
+          &.deadline__passed {
+            color: red;
+
+            .date {
+              display: none;
+            }
+          }
+        }
+
+        p {
+          font-size: 0.9rem;
+        }
+      }
+    }
+  }
+
+  .second__content {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: calc($page__content__padding/2);
+    justify-content: flex-start;
+
+    & > div {
+      width: 100%;
+      background-color: #fff;
+      border-radius: 4px;
+      height: 300px;
+      @extend .box__shadow;
+    }
+
+    .display__pending__tasks {
+      position: sticky;
+      top: calc($page__content__padding/2);
+    }
+  }
+}

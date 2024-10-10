@@ -1,0 +1,1 @@
+const REDIRECT_URI = "api/auth/google/success";

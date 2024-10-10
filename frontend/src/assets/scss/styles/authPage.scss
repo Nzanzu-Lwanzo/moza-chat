@@ -1,0 +1,103 @@
+@import "../imports";
+
+.auth__page__structure {
+  height: 100vh;
+  width: 100%;
+  @include center;
+  background-color: #eee;
+}
+
+.form__card {
+  height: 500px;
+  width: 800px;
+  border-radius: 5px;
+  padding: 1rem;
+  background-color: #fff;
+  @extend .box__shadow;
+
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+
+  .illustration {
+    @include center;
+  }
+
+  .actual__form {
+    flex: 3;
+    padding: 1rem;
+
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+
+    .wrap__inputs {
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0.5rem;
+
+      label {
+        font-size: 0.8rem;
+      }
+      input {
+        padding: 0.5rem 0.8rem;
+        border: 1px solid $dark;
+        border-radius: 3px;
+      }
+
+      .error__message {
+        color: red;
+        font-size: .7rem;
+      }
+    }
+
+    button[type="submit"] {
+      @extend .no__state__button;
+      align-self: flex-start;
+      margin-top: 0.5rem;
+      width: 100%;
+    }
+
+    .o__auth__btn {
+      margin-top: 0.5rem;
+      width: 100%;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      padding: .5rem .8rem;
+      cursor: pointer;
+    }
+
+    .alternative {
+      font-size: .75rem;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+
+
+      &::after,
+      &::before {
+        content: "";
+        display: block;
+        height: 1px;
+        width: 100px;
+        flex:1;
+      }
+    }
+
+    .switch__auth__pages {
+      font-size: .75rem;
+      text-align: center;
+
+      a {
+        color: $accent;
+        text-decoration: none;
+      }
+    }
+  }
+}

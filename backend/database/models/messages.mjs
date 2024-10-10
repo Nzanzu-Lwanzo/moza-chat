@@ -1,6 +1,6 @@
 import mongoose, { mongo } from "mongoose";
 
-let filesEnum = ["image", "doc", "video", "audio"];
+export let filesEnum = ["image", "doc", "video", "audio"];
 
 const MessageSchema = new mongoose.Schema(
   {
@@ -9,14 +9,14 @@ const MessageSchema = new mongoose.Schema(
       required: [true, "Vous devez fournir un message"],
     },
 
-    room: {
+    sendee: {
       type: mongoose.SchemaTypes.ObjectId,
       ref: "User",
     },
 
-    file: {
-      type: String,
-      enum: filesEnum,
+    room: {
+      type: mongoose.SchemaTypes.ObjectId,
+      ref: "User",
     },
 
     refBy: [

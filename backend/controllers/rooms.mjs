@@ -48,8 +48,14 @@ export const initRoom = async (req, res) => {
     const createdRoom = await Room.create(req.body);
     res.status(201).json(createdRoom);
   } catch (e) {
-    console.log(e);
-    res.sendStatus(400);
+    let message = e.message;
+    let name = e.message;
+
+    if (message.includes("name_1 dup key")) {
+      return res.status(406).json({ message: "DUPLICATE_ROOM_NAME" });
+    }
+
+    return res.sendStatus(400);
   }
 };
 
@@ -57,10 +63,9 @@ export const getRoom = async (req, res) => {
   try {
     let { id } = req.params;
 
-    const foundRoom = await Room.findById(id).populate(
-      "participants",
-      "name email picture"
-    );
+    const foundRoom = await Room.findById(id)
+      .populate("participants", "name email picture")
+      .populate("messages");
 
     if (!foundRoom) return res.sendStatus(404);
 
@@ -108,6 +113,23 @@ export const getAllRooms = async (req, res) => {
   try {
     const rooms = await Room.find({ private: true });
     res.json(rooms);
+  } catch (e) {
+    console.log(e);
+    res.sendStatus(400);
+  }
+};
+
+export const getRoomsMessages = async (req, res) => {
+  let { id } = req.params;
+
+  try {
+    const messages = await Room.findById(
+      id,
+      { messages: 1 },
+      { populate: "messages" }
+    );
+
+    res.json(messages);
   } catch (e) {
     console.log(e);
     res.sendStatus(400);

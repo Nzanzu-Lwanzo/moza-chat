@@ -7,19 +7,60 @@ import mongoose from "mongoose";
 import messageRouter from "./backend/routes/messages.mjs";
 import roomRouter from "./backend/routes/rooms.mjs";
 import userRouter from "./backend/routes/users.mjs";
+import authRouter from "./backend/auth/routes/auth.mjs";
+import session from "express-session";
+import cookieParser from "cookie-parser";
+import passport from "passport";
+import { authenticateRequests } from "./backend/utils/middlewares.mjs";
+import MongoStore from "connect-mongo";
 
 const App = express();
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const PORT = process.env.PORT || 5000;
 const MONGODB_URI = process.env.MONGODB_URI;
+const RUNENV = process.env.RUNENV || "dev";
+const SECRET = process.env.SECRET;
 
 App.use(express.json());
 App.use(express.static(join(__dirname, "/frontend/dist")));
 
+App.use((req, res, next) => {
+  let method = req.method;
+  let url = req.url;
+  let status = req.statusCode;
+
+  console.log(`${method} : http://localhost:${PORT}${url} : ${status} `);
+
+  next();
+});
+
+App.use(cookieParser());
+App.use(
+  session({
+    saveUninitialized: false,
+    resave: false,
+    secret: SECRET,
+    cookie: {
+      maxAge: 30 * 24 * 60 * 60,
+      httpOnly: RUNENV !== "dev",
+      secure: RUNENV !== "dev",
+    },
+    store: MongoStore.create({
+      mongoUrl: MONGODB_URI,
+      dbName: "moza_chat",
+      ttl: 30 * 24 * 60 * 60,
+      touchAfter: 24 * 60 * 60,
+    }),
+  })
+);
+App.use(passport.initialize());
+App.use(passport.session());
+
+App.use("/api/auth", authRouter);
+App.use(authenticateRequests);
 App.use("/api/user", userRouter);
 App.use("/api/message", messageRouter);
 App.use("/api/room", roomRouter);
-
 App.get("*", (req, res) => res.sendFile("/index.html"));
 
 App.listen(PORT, () => {
