@@ -1,5 +1,5 @@
-import { hashSync, compare } from "bcrypt";
+import { hashSync, compareSync } from "bcrypt";
 
 export const generate = (raw) => hashSync(raw, 10);
 
-export const validate = async (raw, hashed) => await compare(raw, hashed);
+export const validate = (raw, hashed) => compareSync(raw, hashed);

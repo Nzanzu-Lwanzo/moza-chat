@@ -8,7 +8,7 @@ import { getValidData } from "../../utils/middlewares.mjs";
 
 const authRouter = Router();
 
-authRouter.post("/login", passport.authenticate("local"), loginLocal);
+authRouter.post("/login", passport.authenticate("local", {}), loginLocal);
 authRouter.get("/logout", logOut);
 authRouter.post("/signup", checkSchema(userSchema), getValidData, signUpLocal);
 

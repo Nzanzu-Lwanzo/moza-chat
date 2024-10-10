@@ -13,6 +13,7 @@ import cookieParser from "cookie-parser";
 import passport from "passport";
 import { authenticateRequests } from "./backend/utils/middlewares.mjs";
 import MongoStore from "connect-mongo";
+import cors from "cors";
 
 const App = express();
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -20,6 +21,7 @@ const PORT = process.env.PORT || 5000;
 const MONGODB_URI = process.env.MONGODB_URI;
 const RUNENV = process.env.RUNENV || "dev";
 const SECRET = process.env.SECRET;
+const WHITELIST_ORIGINS = ["http://localhost:5000", "http://localhost:5173"];
 
 App.use(express.json());
 App.use(express.static(join(__dirname, "/frontend/dist")));
@@ -34,6 +36,14 @@ App.use((req, res, next) => {
   next();
 });
 
+App.use(
+  cors({
+    origin: WHITELIST_ORIGINS,
+    methods: ["GET", "POST", "PATCH", "DELETE"],
+    credentials: true,
+    // maxAge : 5 * 60000
+  })
+);
 App.use(cookieParser());
 App.use(
   session({
