@@ -58,10 +58,6 @@ const LogIn = () => {
           Vous n'avez pas de compte ?{" "}
           <Link to="/client/auth/signup">Créez-en</Link> !
         </span>
-        <button type="button" className="o__auth__btn">
-          <GoogleLogo size={25} />
-          <span>Se connecter avec Google</span>
-        </button>
       </form>
     </AuthFormParent>
   );

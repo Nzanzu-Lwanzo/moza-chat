@@ -1,8 +1,6 @@
 @import "../imports";
 
 .auth__page__structure {
-  height: 100vh;
-  width: 100%;
   @include center;
   background-color: #eee;
 }

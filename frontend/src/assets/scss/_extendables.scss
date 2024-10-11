@@ -30,6 +30,7 @@
     cursor: pointer;
     transition: .2s ease-out;
     border: 1px solid $accent;
+    text-decoration: none;
 
     &:hover {
         background-color: transparent;
@@ -39,12 +40,14 @@
 
 .no__state__button__reverse {
     padding: .8rem;
+    font-size: .8rem;
     border-radius: 3px;
     background-color: transparent;
     color: $accent;
     border: 1px solid $accent;
     width: fit-content;
     transition: .2s ease-out;
+    text-decoration: none;
 
     &:hover {
         background-color: $accent;

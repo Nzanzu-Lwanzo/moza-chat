@@ -1,0 +1,63 @@
+@import "../imports";
+
+.home__page {
+  .banner {
+    background-color: $dark;
+    min-height: 50vh;
+    padding: 1rem;
+  }
+
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 1rem;
+  }
+
+  .btn:first-of-type {
+    @extend .no__state__button;
+  }
+
+  .btn:last-of-type {
+    @extend .no__state__button__reverse;
+  }
+
+  .banner__text {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    padding: 2rem;
+    position: relative;
+    gap: 3rem;
+
+    .text {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: center;
+      gap: 1rem;
+      width: 410px;
+
+      h1 {
+        font-size: 4rem;
+        color: $accent;
+        font-weight: 600;
+      }
+
+      p {
+        line-height: 1.8rem;
+        font-size: .9rem;
+      }
+
+      .cta {
+        border-radius: 25px;
+        @extend .no__state__button;
+      }
+    }
+
+    .wrap__illustration {
+      @include center;
+    }
+  }
+}

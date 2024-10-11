@@ -17,7 +17,7 @@ const UserSchema = new mongoose.Schema({
       maxLengthName,
       `Le nom doit avoir une longueur de maximum : ${maxLengthName}`,
     ],
-    unique: true,
+    
   },
 
   email: {

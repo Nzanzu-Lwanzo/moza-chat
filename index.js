@@ -22,6 +22,9 @@ const MONGODB_URI = process.env.MONGODB_URI;
 const RUNENV = process.env.RUNENV || "dev";
 const SECRET = process.env.SECRET;
 const WHITELIST_ORIGINS = ["http://localhost:5000", "http://localhost:5173"];
+let cookiesMaxAge = 60 * 60 * 24 * 30 * 1500;
+let storeSessionExpiryDate = 60 * 60 * 24 * 30 * 1500;
+let refreshStoredSessionInterval = 24 * 3600;
 
 App.use(express.json());
 App.use(express.static(join(__dirname, "/frontend/dist")));
@@ -51,15 +54,15 @@ App.use(
     resave: false,
     secret: SECRET,
     cookie: {
-      maxAge: 30 * 24 * 60 * 60,
+      maxAge: cookiesMaxAge, // 30 days
       httpOnly: RUNENV !== "dev",
       secure: RUNENV !== "dev",
     },
     store: MongoStore.create({
       mongoUrl: MONGODB_URI,
       dbName: "moza_chat",
-      ttl: 30 * 24 * 60 * 60,
-      touchAfter: 24 * 60 * 60,
+      ttl: storeSessionExpiryDate,
+      touchAfter: refreshStoredSessionInterval,
     }),
   })
 );

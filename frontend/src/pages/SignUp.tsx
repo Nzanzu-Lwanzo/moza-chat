@@ -72,10 +72,6 @@ const SignUp = () => {
           Vous avez déjà un compte ?{" "}
           <Link to="/client/auth/login">Connectez-le</Link> !
         </span>
-        <button type="button" className="o__auth__btn">
-          <GoogleLogo size={25} />
-          <span>Se connecter avec Google</span>
-        </button>
       </form>
     </AuthFormParent>
   );

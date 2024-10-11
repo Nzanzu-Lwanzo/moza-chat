@@ -1,3 +1,4 @@
+
 let RUNENV: "dev" | "prod" = "dev";
 
 const COLOR_SCHEMA: Record<string, string> = {
@@ -9,6 +10,7 @@ const COLOR_SCHEMA: Record<string, string> = {
 const ORIGIN =
   RUNENV === "dev" ? "http://localhost:5000" : document.location.origin;
 
-const BASE_URL = ORIGIN.concat("/api")
+const BASE_URL = ORIGIN.concat("/api");
+
 
 export { COLOR_SCHEMA, ORIGIN, BASE_URL };

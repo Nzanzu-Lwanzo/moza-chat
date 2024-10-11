@@ -1,4 +1,4 @@
-const ServerActionError = ({
+const ServerDown = ({
   height = "200",
   width = "200",
 }: {
@@ -8,8 +8,8 @@ const ServerActionError = ({
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width={height}
-      height={width}
+      width={width}
+      height={height}
       viewBox="0 0 1119.60911 699"
       xmlnsXlink="http://www.w3.org/1999/xlink"
     >
@@ -234,4 +234,4 @@ const ServerActionError = ({
   );
 };
 
-export default ServerActionError;
+export default ServerDown;

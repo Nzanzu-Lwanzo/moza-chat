@@ -111,7 +111,10 @@ export const updateRoom = async (req, res) => {
 // So that means, the room is not publicly visible.
 export const getAllRooms = async (req, res) => {
   try {
-    const rooms = await Room.find({ private: true });
+    const rooms = await Room.find(
+      { private: true },
+      { participants: false }
+    ).limit(10);
     res.json(rooms);
   } catch (e) {
     console.log(e);

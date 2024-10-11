@@ -1,0 +1,165 @@
+@import "../imports";
+
+.chat__page {
+  background-color: #eee;
+  @include center;
+}
+
+.chat__card {
+  @extend .box__shadow;
+  height: 80vh;
+  width: 70vw;
+  background-color: #fff;
+  border-radius: 5px;
+
+  display: grid;
+  grid-template-columns: 35% 65%;
+
+  .part {
+    height: 100%;
+
+    &:first-of-type {
+      background-color: $dark;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0;
+      justify-content: flex-start;
+
+      & > * {
+        padding: 0.5rem 0.8rem;
+        border-bottom: 0.5px solid $second__dark;
+      }
+
+      .top__bar {
+        width: 100%;
+
+        .filter__box {
+          display: flex;
+          align-items: center;
+          justify-content: flex-end;
+          height: 40px;
+          border-radius: 2px;
+          padding: 0;
+          overflow: hidden;
+          border: 1px solid $second__dark;
+          color: #fff;
+          transition: .2s ease-out;
+
+          ::placeholder {
+            color: $second__dark;
+          }
+
+          svg {
+            fill: $second__dark;
+          }
+
+          &:has(input:focus-within) {
+            border-color: $accent;
+            svg {
+              fill: $accent;
+            }
+
+            ::placeholder {
+              color: $accent;
+            }
+          }
+
+          input,
+          .icon {
+            padding: 0.1rem 0.4rem;
+            height: 100%;
+            background-color: transparent;
+          }
+
+          .icon {
+            @include center;
+          }
+
+          input {
+            width: 100%;
+            font-size: 0.8rem;
+            color: $accent;
+
+            &::-webkit-search-cancel-button {
+              display: none;
+            }
+          }
+        }
+      }
+
+      .filter__tags {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+
+        .filter__tag {
+          font-size: 0.7rem;
+          padding: 0.3rem 0.5rem;
+          border-radius: 20px;
+          background-color: rgba($color: $accent, $alpha: 0.1);
+          color: $accent;
+          cursor: pointer;
+          transition: 0.2s ease-out;
+
+          &:hover {
+            background-color: $accent;
+            color: $dark;
+          }
+        }
+      }
+
+      .list__rooms {
+        height: 100%;
+        overflow: auto;
+        // padding: 0;
+
+        ul {
+          display: flex;
+          flex-direction: column;
+          align-items: stretch;
+          justify-content: flex-start;
+          height: 100%;
+
+          li {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 0.5rem;
+            font-size: 0.75rem;
+            color: #fff;
+            padding: 0.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+
+            &.active {
+              background-color: $second__dark;
+            }
+          }
+        }
+      }
+
+      .bottom {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 0.5rem;
+
+        .action {
+          @extend .icon__button;
+          background-color: $second__dark;
+          transition: 0.2s ease-out;
+          svg {
+            fill: #fff;
+          }
+
+          &:hover {
+            background-color: $accent;
+          }
+        }
+      }
+    }
+  }
+}

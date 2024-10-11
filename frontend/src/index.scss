@@ -25,6 +25,11 @@ body,
   font-style: normal;
 }
 
+main {
+  height: 100vh;
+  width: 100%;
+}
+
 #app__page__structure {
   display: grid;
   grid-template-columns: 15% 85%;
@@ -144,12 +149,38 @@ body,
 }
 
 .go1888806478.notistack-MuiContent.notistack-MuiContent-default.go167266335.go3844575157 {
-  font-size: .75rem;
-  padding: .2rem .8rem;
+  font-size: 0.75rem;
+  padding: 0.2rem 0.8rem;
 
   button {
     background-color: transparent;
     @include center;
     cursor: pointer;
   }
+}
+
+
+.whole__element__loader,
+.illustration__placeholder {
+  height: 100%;
+  @include center;
+  padding: inherit;
+
+  .message {
+    font-size: .7rem;
+    &.light {
+      color: $second__dark;
+    }
+    &.dark {
+      color: $whity;
+    }
+  }
+}
+
+
+.avatar {
+  height: 40px;
+  width: 40px;
+  object-fit: cover;
+  border-radius: 50%;
 }
