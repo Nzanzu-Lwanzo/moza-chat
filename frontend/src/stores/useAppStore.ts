@@ -22,9 +22,9 @@ const useAppStore = create<State & Actions>()((set) => ({
   auth: lsRead<UserType>("auth-user"),
   currentRoom: lsRead<RoomType>("current-room"),
   modal: undefined,
-  setAuth(user) {
+  setAuth(auth) {
     set((state) => {
-      return { ...state, user };
+      return { ...state, auth };
     });
   },
   setRooms(rooms) {

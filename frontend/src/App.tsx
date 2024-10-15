@@ -10,6 +10,7 @@ import { XCircle } from "@phosphor-icons/react";
 import { CookiesProvider } from "react-cookie";
 import { openLocalDatabase } from "./db/connection";
 import { useEffect } from "react";
+import useAppStore from "./stores/useAppStore";
 
 const client = new QueryClient({
   defaultOptions: {
@@ -23,6 +24,10 @@ const client = new QueryClient({
 });
 
 function App() {
+  const auth = useAppStore((state) => state.auth);
+
+  console.log(auth);
+
   useEffect(() => {
     openLocalDatabase({
       onOpenSuccess: () => {

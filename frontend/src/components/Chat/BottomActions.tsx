@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 
 const BottomActions = memo(() => {
   const { isLogginOut, logout } = useAuthenticate();
-  const {auth,setModal} = useAppStore();
+  const { auth, setModal } = useAppStore();
 
   return (
     <>
