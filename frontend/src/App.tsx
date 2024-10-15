@@ -4,23 +4,36 @@ import LogIn from "./pages/LogIn";
 import SignUp from "./pages/SignUp";
 import Chat from "./pages/Chat";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { SnackbarProvider, closeSnackbar } from "notistack";
+import { SnackbarProvider, closeSnackbar, enqueueSnackbar } from "notistack";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import { XCircle } from "@phosphor-icons/react";
 import { CookiesProvider } from "react-cookie";
+import { openLocalDatabase } from "./db/connection";
+import { useEffect } from "react";
 
 const client = new QueryClient({
   defaultOptions: {
     mutations: {},
     queries: {
       refetchOnReconnect: true,
-      refetchOnWindowFocus : false,
+      refetchOnWindowFocus: false,
       retry: 2,
     },
   },
 });
 
 function App() {
+  useEffect(() => {
+    openLocalDatabase({
+      onOpenSuccess: () => {
+        enqueueSnackbar("IDB initialized successfully !");
+      },
+      onOpenError: () => {
+        enqueueSnackbar("IDB not initialized !");
+      },
+    });
+  }, []);
+
   return (
     <>
       <CookiesProvider>

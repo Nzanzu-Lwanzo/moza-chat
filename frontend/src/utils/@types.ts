@@ -11,12 +11,13 @@ export interface RoomType {
   name: string;
   description: string;
   picture?: string;
-  participants?: string;
+  participants?: (string | undefined)[];
   restricted: boolean;
   private: boolean;
   likes: number;
   createdAt: string;
   updatedAt: true;
+  initiated_by?: UserType;
 }
 
 export type LogInUserType = Pick<UserType, "name" | "password">;

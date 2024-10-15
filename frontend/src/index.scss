@@ -159,7 +159,6 @@ main {
   }
 }
 
-
 .whole__element__loader,
 .illustration__placeholder {
   height: 100%;
@@ -167,7 +166,7 @@ main {
   padding: inherit;
 
   .message {
-    font-size: .7rem;
+    font-size: 0.7rem;
     &.light {
       color: $second__dark;
     }
@@ -177,10 +176,136 @@ main {
   }
 }
 
-
 .avatar {
   height: 40px;
   width: 40px;
   object-fit: cover;
   border-radius: 50%;
+}
+
+html:has(.modal__panel) {
+  overflow: hidden;
+}
+
+.modal__panel {
+  height: 100vh;
+  width: 100vw;
+  position: fixed;
+  inset: 0;
+  background-color: rgba($color: #000000, $alpha: 0.8);
+  @include center;
+  transition: 0.2s ease-in-out;
+
+  opacity: 0;
+  pointer-events: none;
+
+  .card {
+    width: 500px;
+    min-height: 200px;
+    max-height: 80vh;
+    background-color: #fff;
+    border-radius: 3px;
+    padding: 0;
+    padding-bottom: 1rem;
+  }
+
+  .top__bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem 1rem;
+
+    .close {
+      @extend .icon__button;
+    }
+  }
+
+  &.show {
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  .inputs__container {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+    padding: 0 1rem;
+  }
+}
+
+.actual__form {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 1rem;
+
+  ::placeholder {
+    font-size: 0.75rem;
+  }
+
+  .wrap__inputs {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.5rem;
+
+    label {
+      font-size: 0.8rem;
+    }
+
+    textarea,
+    input {
+      padding: 0.5rem 0.8rem;
+      border: 1px solid $dark;
+      border-radius: 3px;
+      resize: none;
+    }
+
+    .error__message {
+      color: red;
+      font-size: 0.7rem;
+    }
+  }
+
+  .wrap__inputs__check {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.75rem;
+    label,
+    input {
+      display: inline-block;
+    }
+    input {
+      accent-color: $accent;
+    }
+
+    .cell {
+      @include transp;
+      padding: 0.2rem 0.3rem;
+      border-radius: 25px;
+      margin-left: 0.5rem;
+
+      opacity: 0;
+      transition: 0.3s ease-out;
+
+      &.chosen {
+        opacity: 1;
+      }
+    }
+  }
+
+  button.submit__button {
+    @extend .no__state__button;
+    align-self: flex-start;
+    margin-top: 0.5rem;
+    width: 100%;
+  }
+}
+
+@media only all and (max-width: 600px) {
+  .modal__panel .card {
+    width: 90%;
+  }
 }

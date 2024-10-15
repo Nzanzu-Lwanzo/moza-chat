@@ -2,6 +2,7 @@ import "../assets/scss/styles/chat.scss";
 import ListRooms from "../components/Chat/ListRooms";
 import SearchAndFilter from "../components/Chat/SearchAndFilter";
 import BottomActions from "../components/Chat/BottomActions";
+import Modal from "../components/CrossApp/Modal";
 
 const Chat = () => {
   return (
@@ -15,6 +16,8 @@ const Chat = () => {
 
         <div className="part"></div>
       </div>
+
+      <Modal></Modal>
     </main>
   );
 };

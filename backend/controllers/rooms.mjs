@@ -45,7 +45,12 @@ const updateActionsArray = Object.keys(updateActions);
 
 export const initRoom = async (req, res) => {
   try {
-    const createdRoom = await Room.create(req.body);
+    const createdRoom = await Room.create({
+      ...req.body,
+      initiated_by: req.user._id,
+      participants: [req.user._id],
+    }).then((dov) => dov.populate("initiated_by"));
+
     res.status(201).json(createdRoom);
   } catch (e) {
     let message = e.message;
@@ -65,7 +70,8 @@ export const getRoom = async (req, res) => {
 
     const foundRoom = await Room.findById(id)
       .populate("participants", "name email picture")
-      .populate("messages");
+      .populate("messages")
+      .populate("initiated_by");
 
     if (!foundRoom) return res.sendStatus(404);
 
@@ -111,10 +117,14 @@ export const updateRoom = async (req, res) => {
 // So that means, the room is not publicly visible.
 export const getAllRooms = async (req, res) => {
   try {
-    const rooms = await Room.find(
-      { private: true },
-      { participants: false }
-    ).limit(10);
+    // Don't fetch the rooms where private is true but
+    // the initiator of the room is not the user
+    // currently authenticated
+    const rooms = await Room.find({}, { messages: false })
+      .populate("initiated_by")
+      // .limit(10)
+      .lean();
+
     res.json(rooms);
   } catch (e) {
     console.log(e);

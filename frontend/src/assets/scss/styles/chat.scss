@@ -104,7 +104,8 @@
           cursor: pointer;
           transition: 0.2s ease-out;
 
-          &:hover {
+          &:hover,
+          &.active {
             background-color: $accent;
             color: $dark;
           }
@@ -158,6 +159,17 @@
           &:hover {
             background-color: $accent;
           }
+        }
+
+        .username {
+          color: #FFF;
+          font-size: .8rem;
+        }
+
+        .new__room__btn {
+          @extend .no__state__button;
+          padding: .5rem;
+          font-size: .75rem;
         }
       }
     }

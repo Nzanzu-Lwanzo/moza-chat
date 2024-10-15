@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
 
-
 export let maxLengthName = 64;
 export let minLengthName = 10;
 
@@ -12,17 +11,19 @@ const RoomSchema = new mongoose.Schema(
       trim: true,
       maxLength: maxLengthName,
       minLength: minLengthName,
-      unique : true
+      unique: true,
     },
 
     description: String,
 
     picture: String,
 
-    messages : [{
-      type : mongoose.SchemaTypes.ObjectId,
-      ref : 'Message'
-    }],
+    messages: [
+      {
+        type: mongoose.SchemaTypes.ObjectId,
+        ref: "Message",
+      },
+    ],
 
     participants: [
       {
@@ -30,6 +31,11 @@ const RoomSchema = new mongoose.Schema(
         ref: "User",
       },
     ],
+
+    initiated_by: {
+      type: mongoose.SchemaTypes.ObjectId,
+      ref: "User",
+    },
 
     restricted: {
       type: Boolean,

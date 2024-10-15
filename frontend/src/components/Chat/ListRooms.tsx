@@ -10,10 +10,8 @@ import { useEffect } from "react";
 
 const ListRooms = () => {
   const { isError, isFetching, isSuccess } = useGetRooms();
-  const rooms = useAppStore((state) => state.rooms);
-  const currentRoom = useAppStore((state) => state.currentRoom);
-  const setCurrentRoom = useAppStore((state) => state.setCurrentRoom);
-  const setRooms = useAppStore((state) => state.setRooms);
+
+  const { rooms, setCurrentRoom, setRooms, currentRoom } = useAppStore();
 
   let isActive = (id: string) => currentRoom?._id === id;
 
@@ -45,7 +43,7 @@ const ListRooms = () => {
           })}
         </ul>
       ) : isSuccess && rooms.length == 0 ? (
-        <Placeholder>
+        <Placeholder message="Oups ! Aucune room trouvée !">
           <NoChat />
         </Placeholder>
       ) : null}

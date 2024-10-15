@@ -1,14 +1,13 @@
 import AuthFormParent from "../components/Auth/Parent";
 import Loader from "../components/CrossApp/Loader";
 import { Link } from "react-router-dom";
-import { GoogleLogo } from "@phosphor-icons/react";
 import { useAuthenticate } from "../hooks/useAuth";
 import React, { useState } from "react";
-import { SignUpUser } from "../utils/@types";
+import { SignUpUserType } from "../utils/@types";
 import { enqueueSnackbar } from "notistack";
 
 const SignUp = () => {
-  const [user, setUser] = useState<SignUpUser | null>(null);
+  const [user, setUser] = useState<SignUpUserType | null>(null);
 
   const { signup, isPending } = useAuthenticate();
 

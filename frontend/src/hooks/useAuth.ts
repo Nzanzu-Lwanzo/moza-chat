@@ -10,8 +10,7 @@ import { useCookies } from "react-cookie";
 import { useState } from "react";
 
 export const useAuthenticate = () => {
-  const setAuth = useAppStore((state) => state.setAuth);
-  const setCurrentRoom = useAppStore((state) => state.setCurrentRoom);
+  const { setAuth, setCurrentRoom } = useAppStore();
   const navigateTo = useNavigate();
   const [isLogginOut, setIsLoggingOut] = useState(false);
 

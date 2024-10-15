@@ -1,14 +1,14 @@
 import useAppStore from "../stores/useAppStore";
 import Axios, { AxiosError } from "axios";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { BASE_URL } from "../utils/constants";
 import { RoomType } from "../utils/@types";
 import { useNavigate } from "react-router-dom";
 import { enqueueSnackbar } from "notistack";
+import { idbConnection } from "../db/connection";
 
 export const useGetRooms = () => {
-  const setRooms = useAppStore((state) => state.setRooms);
-  const setCurrentRoom = useAppStore((state) => state.setCurrentRoom);
+  const { setRooms, auth } = useAppStore();
 
   const navigateTo = useNavigate();
 
@@ -21,10 +21,30 @@ export const useGetRooms = () => {
         });
 
         const rooms = response.data as RoomType[];
-        setRooms(rooms);
-        setCurrentRoom(rooms[0]);
 
-        return rooms;
+        try {
+          await idbConnection.insert({
+            into: "rooms",
+            values: rooms,
+            upsert: true,
+            skipDataCheck: true,
+            ignore: true,
+          });
+        } catch (e) {
+          console.log(e);
+        }
+
+        // Take only the rooms that are public
+        // and if a room is private, then the initiator must be the currently authenticated user
+        const chosenRooms = rooms.filter((room) => {
+          return (
+            !room.private ||
+            (room.private && room.initiated_by?._id === auth?._id)
+          );
+        });
+        setRooms(chosenRooms);
+
+        return chosenRooms;
       } catch (e) {
         let error = e as AxiosError;
         if (error.response?.status === 401) {
@@ -33,12 +53,58 @@ export const useGetRooms = () => {
           return;
         }
 
-        console.log(e);
-
         return e;
       }
     },
   });
 
   return { data, isFetching, isError, isSuccess };
+};
+
+export const useCreateRoom = () => {
+  const navigateTo = useNavigate();
+  const { setRooms, setModal } = useAppStore();
+
+  const { mutate, data, isPending, isError, isSuccess } = useMutation({
+    mutationKey: ["room"],
+    mutationFn: async (
+      data: Pick<RoomType, "name" | "description" | "private" | "restricted">
+    ) => {
+      try {
+        const response = await Axios.post(BASE_URL.concat("/room/"), data, {
+          withCredentials: true,
+        });
+
+        if (response.status === 201) {
+          let data = response.data as RoomType;
+
+          idbConnection.insert({
+            into: "rooms",
+            values: [data],
+          });
+
+          setRooms([data]);
+
+          setModal(undefined);
+
+          enqueueSnackbar("Chat room créée avec succès !");
+        }
+
+        return response.data;
+      } catch (e) {
+        const errorResponse = (e as AxiosError).response;
+
+        if (errorResponse?.status === 401) {
+          navigateTo("/client/auth/login");
+          enqueueSnackbar("Connectez-vous pour créer une room !");
+        }
+
+        console.log(errorResponse);
+
+        return e;
+      }
+    },
+  });
+
+  return { mutate, data, isPending, isError, isSuccess };
 };

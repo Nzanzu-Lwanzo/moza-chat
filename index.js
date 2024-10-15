@@ -70,6 +70,7 @@ App.use(passport.initialize());
 App.use(passport.session());
 
 App.use("/api/auth", authRouter);
+
 App.use(authenticateRequests);
 App.use("/api/user", userRouter);
 App.use("/api/message", messageRouter);

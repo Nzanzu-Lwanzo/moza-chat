@@ -47,7 +47,7 @@
 
       p {
         line-height: 1.8rem;
-        font-size: .9rem;
+        font-size: 0.9rem;
       }
 
       .cta {
@@ -59,5 +59,25 @@
     .wrap__illustration {
       @include center;
     }
+  }
+}
+
+.content {
+  width: 60vw;
+  margin: auto;
+  padding: 2rem 1rem;
+
+  line-height: 1.5rem;
+
+  h1 {
+    font-size: 2rem;
+  }
+
+  p {
+    font-size: 0.9rem;
+  }
+
+  & > * {
+    margin-bottom: 0.8rem;
   }
 }

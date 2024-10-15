@@ -1,14 +1,13 @@
 import AuthFormParent from "../components/Auth/Parent";
 import { Link } from "react-router-dom";
-import { GoogleLogo } from "@phosphor-icons/react";
 import { useAuthenticate } from "../hooks/useAuth";
 import React, { useState } from "react";
-import { LogInUser } from "../utils/@types";
+import { LogInUserType } from "../utils/@types";
 import { enqueueSnackbar } from "notistack";
 import Loader from "../components/CrossApp/Loader";
 
 const LogIn = () => {
-  const [user, setUser] = useState<LogInUser | null>(null);
+  const [user, setUser] = useState<LogInUserType | null>(null);
   const { login, isPending } = useAuthenticate();
 
   return (
@@ -24,7 +23,7 @@ const LogIn = () => {
             name="name"
             required
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              setUser((prev) => ({ ...prev, name: e.target.value }))
+              setUser((prev: LogInUserType) => ({ ...prev, name: e.target.value }))
             }
           />
         </div>
@@ -37,7 +36,10 @@ const LogIn = () => {
             name="password"
             required
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              setUser((prev) => ({ ...prev, password: e.target.value }))
+              setUser((prev: LogInUserType) => ({
+                ...prev,
+                password: e.target.value,
+              }))
             }
           />
         </div>
@@ -45,7 +47,6 @@ const LogIn = () => {
           type="button"
           className="submit__button"
           onClick={() => {
-
             if (!user?.name || !user?.password)
               return enqueueSnackbar("Données invalides ou incomplètes !");
 
