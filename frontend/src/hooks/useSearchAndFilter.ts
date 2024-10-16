@@ -1,12 +1,14 @@
 import React, { useEffect, useMemo, useState, useTransition } from "react";
-import useAppStore from "../stores/useAppStore";
-import { State } from "../stores/useSearchAndFilterStore";
+import useAppStore from "../stores/AppStore";
+import { State } from "../stores/SearchAndFilterStore";
 import { idbConnection } from "../db/connection";
 import { RoomType } from "../utils/@types";
 import { enqueueSnackbar } from "notistack";
+import useChatStore from "../stores/ChatStore";
 
 const useSearchAndFilter = () => {
-  const { setRoomsAndReplace, auth, rooms } = useAppStore();
+  const { auth } = useAppStore();
+  const { setRoomsAndReplace, rooms } = useChatStore();
   const [pending, setTransition] = useTransition();
   const [idbRooms, setIdbRooms] = useState<RoomType[]>([]);
 

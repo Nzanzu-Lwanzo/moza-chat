@@ -10,4 +10,14 @@ export const createAccount = async (req, res) => {
   }
 };
 
+export const getAllUsers = async (req, res) => {
+  try {
+    const users = await User.find({}, { password: 0 }, { lean: true });
+    res.json(users);
+  } catch (e) {
+    console.log(e);
+    res.sendStatus(400);
+  }
+};
+
 export const updateAccount = (req, res) => {};

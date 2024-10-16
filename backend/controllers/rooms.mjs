@@ -10,7 +10,12 @@ export const updateActions = {
       id,
       { $addToSet: { participants: { $each: ids } } },
       { new: true }
-    );
+    )
+      .populate({
+        path: "participants",
+        select: "_id name email",
+      })
+      .populate("initiated_by");
 
     return updatedRoom;
   },
@@ -23,7 +28,12 @@ export const updateActions = {
       id,
       { $pullAll: { participants: ids } },
       { new: true }
-    );
+    )
+      .populate({
+        path: "participants",
+        select: "_id name email",
+      })
+      .populate("initiated_by");
 
     return updatedRoom;
   },
@@ -35,7 +45,12 @@ export const updateActions = {
 
     const updatedRoom = await Room.findByIdAndUpdate(id, req.body, {
       new: true,
-    });
+    })
+      .populate({
+        path: "participants",
+        select: "_id name email",
+      })
+      .populate("initiated_by");
 
     return updatedRoom;
   },
@@ -87,7 +102,7 @@ export const deleteRoom = async (req, res) => {
 
   try {
     const deletedRoom = await Room.findByIdAndDelete(id);
-    res.sendStatus(204);
+    res.sendStatus(200).json(deletedRoom);
   } catch (e) {
     console.log(e);
     res.sendStatus(400);
@@ -122,7 +137,9 @@ export const getAllRooms = async (req, res) => {
     // currently authenticated
     const rooms = await Room.find({}, { messages: false })
       .populate("initiated_by")
+
       // .limit(10)
+      .sort({ likes: -1 })
       .lean();
 
     res.json(rooms);

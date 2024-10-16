@@ -262,6 +262,10 @@ html:has(.modal__panel) {
       resize: none;
     }
 
+    textarea {
+      height: 100px;
+    }
+
     .error__message {
       color: red;
       font-size: 0.7rem;
@@ -303,6 +307,22 @@ html:has(.modal__panel) {
     width: 100%;
   }
 }
+
+::-webkit-scrollbar{
+  width: .5rem;
+  background-color: $dark;
+  -webkit-transition: .2s ease-out;
+  transition: .2s ease-out;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: $accent;
+}
+
+::-webkit-scrollbar-button {
+  background-color: #111314;
+}
+
 
 @media only all and (max-width: 600px) {
   .modal__panel .card {

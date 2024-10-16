@@ -8,9 +8,12 @@ import { SnackbarProvider, closeSnackbar, enqueueSnackbar } from "notistack";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import { XCircle } from "@phosphor-icons/react";
 import { CookiesProvider } from "react-cookie";
-import { openLocalDatabase } from "./db/connection";
+import { idbConnection, openLocalDatabase } from "./db/connection";
 import { useEffect } from "react";
-import useAppStore from "./stores/useAppStore";
+import Axios from "axios";
+import { BASE_URL } from "./utils/constants";
+import useChatStore from "./stores/ChatStore";
+import { UserType } from "./utils/@types";
 
 const client = new QueryClient({
   defaultOptions: {
@@ -24,14 +27,29 @@ const client = new QueryClient({
 });
 
 function App() {
-  const auth = useAppStore((state) => state.auth);
-
-  console.log(auth);
+  const { setAllUsers } = useChatStore();
 
   useEffect(() => {
     openLocalDatabase({
       onOpenSuccess: () => {
         enqueueSnackbar("IDB initialized successfully !");
+
+        Axios.get(BASE_URL.concat("/user/"), { withCredentials: true })
+          .then((response) => {
+            const data = response.data;
+            setAllUsers(data as UserType[]);
+            idbConnection.insert({
+              into: "users",
+              values: data,
+              ignore: true,
+              skipDataCheck: true,
+              upsert: true,
+            });
+          })
+          .catch((e) => {
+            console.log(e);
+            setAllUsers(null);
+          });
       },
       onOpenError: () => {
         enqueueSnackbar("IDB not initialized !");

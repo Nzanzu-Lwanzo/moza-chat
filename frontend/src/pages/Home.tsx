@@ -1,11 +1,10 @@
 import "../assets/scss/styles/home.scss";
 import { Link } from "react-router-dom";
 import Chat from "../assets/illustrations/Chat";
-import useAppStore from "../stores/useAppStore";
+import useAppStore from "../stores/AppStore";
 
 const Home = () => {
-
-  const auth = useAppStore((state)=>state.auth)
+  const auth = useAppStore((state) => state.auth);
 
   return (
     <main className="home__page">
@@ -35,7 +34,7 @@ const Home = () => {
         </div>
       </section>
 
-      <section className="content">
+      <section className="content" id="about">
         <h1>Au sujet de Moza Chat</h1>
       </section>
     </main>

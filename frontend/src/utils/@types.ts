@@ -11,13 +11,21 @@ export interface RoomType {
   name: string;
   description: string;
   picture?: string;
-  participants?: (string | undefined)[];
+  participants?: (string | UserType | undefined)[];
   restricted: boolean;
   private: boolean;
   likes: number;
   createdAt: string;
   updatedAt: true;
   initiated_by?: UserType;
+}
+
+export interface MessageType {
+  _id: string;
+  content: string;
+  sendee: UserType;
+  room: RoomType;
+  refBy?: string[];
 }
 
 export type LogInUserType = Pick<UserType, "name" | "password">;

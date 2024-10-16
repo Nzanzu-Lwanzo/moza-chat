@@ -1,6 +1,6 @@
 import React from "react";
-import useAppStore from "../../stores/useAppStore";
-import type { ModalType } from "../../stores/useAppStore";
+import useAppStore from "../../stores/AppStore";
+import type { ModalType } from "../../stores/AppStore";
 import RoomForm from "../Form/RoomForm";
 
 const MAP_MODAL_ELT: Record<NonNullable<ModalType>, React.ReactElement> = {

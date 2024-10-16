@@ -1,7 +1,7 @@
 import { Connection, DATA_TYPE } from "jsstore";
 import WorkerInjector from "jsstore/dist/worker_injector";
 
-let dbVersion = 2;
+let dbVersion = 5;
 let dbName = "moza_chat";
 
 export const idbConnection = new Connection();
@@ -50,6 +50,22 @@ const messageTable = {
   },
 };
 
+const userTable = {
+  name: "users",
+  columns: {
+    name: { dataType: DATA_TYPE.String, notNull: true },
+    email: { dataType: DATA_TYPE.String },
+    picture: { dataType: DATA_TYPE.String },
+  },
+  alter: {
+    5: {
+      add: {
+        _id: { primaryKey: true, notNull: true, unique: true },
+      },
+    },
+  },
+};
+
 export async function openLocalDatabase({
   onOpenSuccess,
   onOpenError,
@@ -60,7 +76,7 @@ export async function openLocalDatabase({
   try {
     let ok = idbConnection.initDb({
       name: dbName,
-      tables: [roomTable, messageTable],
+      tables: [roomTable, messageTable, userTable],
       version: dbVersion,
     });
 

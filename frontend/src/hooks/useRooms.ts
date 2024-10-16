@@ -1,14 +1,17 @@
-import useAppStore from "../stores/useAppStore";
-import Axios, { AxiosError } from "axios";
+import useAppStore from "../stores/AppStore";
+import Axios, { AxiosError, AxiosResponse } from "axios";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { BASE_URL } from "../utils/constants";
 import { RoomType } from "../utils/@types";
 import { useNavigate } from "react-router-dom";
 import { enqueueSnackbar } from "notistack";
 import { idbConnection } from "../db/connection";
+import useChatStore from "../stores/ChatStore";
+import { useState, useTransition } from "react";
 
 export const useGetRooms = () => {
-  const { setRooms, auth } = useAppStore();
+  const { auth } = useAppStore();
+  const { setRooms } = useChatStore();
 
   const navigateTo = useNavigate();
 
@@ -63,7 +66,8 @@ export const useGetRooms = () => {
 
 export const useCreateRoom = () => {
   const navigateTo = useNavigate();
-  const { setRooms, setModal } = useAppStore();
+  const { setModal } = useAppStore();
+  const { setRooms } = useChatStore();
 
   const { mutate, data, isPending, isError, isSuccess } = useMutation({
     mutationKey: ["room"],
@@ -107,4 +111,165 @@ export const useCreateRoom = () => {
   });
 
   return { mutate, data, isPending, isError, isSuccess };
+};
+
+export const useGetRoom = () => {
+  const { setCurrentRoom } = useChatStore();
+
+  const [status, setStatus] = useState<
+    "pending" | "error" | "success" | "stable"
+  >("stable");
+
+  return {
+    request: async (id: RoomType["_id"]) => {
+      setStatus("pending");
+
+      Axios.get(BASE_URL.concat(`/room/${id}`), {
+        withCredentials: true,
+      })
+        .then((response) => {
+          const data = response.data as RoomType;
+
+          idbConnection.insert({
+            into: "rooms",
+            values: [data],
+            upsert: true,
+            ignore: true,
+          });
+
+          setCurrentRoom(data);
+          setStatus("success");
+
+          return data;
+        })
+        .catch((e) => {
+          setStatus("error");
+          let { response } = e as AxiosError;
+
+          if (response?.status === 404) {
+            enqueueSnackbar("Chat Room non trouvée sur le serveur !");
+
+            idbConnection.remove({
+              from: "rooms",
+              where: {
+                _id: id,
+              },
+            });
+            return;
+          }
+
+          console.log(response);
+        });
+    },
+    status,
+  };
+};
+
+interface UpdateMutateType {
+  rid: RoomType["_id"] | undefined;
+  query: "adp" | "rmp" | "gen";
+  data: string[] | RoomType;
+}
+
+interface UpdateHookType {
+  onSuccess?(data: AxiosResponse["data"]): void;
+  onError?(error: AxiosError["response"]): void;
+}
+
+export const useUpdateRoom = ({ onSuccess, onError }: UpdateHookType = {}) => {
+  const { setCurrentRoom, setRoomsAndReplace } = useChatStore();
+  const [isUpdatingRoomsAfterUpdateOfARoom, startTransition] = useTransition();
+
+  const { mutate, isPending, isError, isSuccess } = useMutation({
+    mutationKey: ["room"],
+    mutationFn: async ({ rid, query, data }: UpdateMutateType) => {
+      if (!rid) return enqueueSnackbar("Aucune room n'est séléctionnée !");
+
+      try {
+        const response = await Axios.patch(
+          BASE_URL.concat(`/room/${rid}/?action=${query}`),
+          data,
+          { withCredentials: true }
+        );
+
+        if (response.status < 400) {
+          setCurrentRoom(response.data);
+
+          startTransition(() => {
+            idbConnection
+              .select({ from: "rooms" })
+              .then((data) => {
+                const rooms = data as RoomType[];
+                let idx = rooms.findIndex(
+                  (room) => room._id === response.data?._id
+                );
+
+                if (idx == -1) return;
+
+                rooms.splice(idx, 1, response.data);
+
+                setRoomsAndReplace(rooms);
+              })
+              .catch((e) => {
+                console.log(e);
+                return;
+              });
+          });
+
+          idbConnection.insert({
+            into: "rooms",
+            values: [response.data],
+            upsert: true,
+            skipDataCheck: true,
+          });
+
+          // Do something on success !
+          if (onSuccess && typeof onSuccess === "function")
+            onSuccess(response.data);
+        }
+      } catch (e) {
+        console.log(e);
+        enqueueSnackbar("Echec de la mise-à-jour !");
+
+        // Do something on error !
+        if (onError && typeof onError === "function")
+          onError((e as AxiosError).response);
+      }
+    },
+  });
+
+  return {
+    mutate,
+    isPending,
+    isError,
+    isSuccess,
+    isUpdatingRoomsAfterUpdateOfARoom,
+  };
+};
+
+export const useDeleteRoom = () => {
+  const { mutate, isPending } = useMutation({
+    mutationKey: ["room"],
+    mutationFn: async (id: string | undefined) => {
+      if (!id)
+        return enqueueSnackbar(
+          "Aucune Chat Room séléctionnée, actualisez la page !"
+        );
+
+      try {
+        const response = await Axios.delete(BASE_URL.concat(`/room/${id}`), {
+          withCredentials: true,
+        });
+
+        console.log(response.data);
+
+        return response.data;
+      } catch (e) {
+        console.log(e);
+        enqueueSnackbar("Chat Room non supprimée ! ");
+      }
+    },
+  });
+
+  return { mutate, isPending };
 };

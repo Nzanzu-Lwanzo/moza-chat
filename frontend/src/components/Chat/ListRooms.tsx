@@ -1,25 +1,39 @@
 import RoomElt from "./RoomElt";
 import Placeholder from "../CrossApp/Placeholder";
 import NoChat from "../../assets/illustrations/NoChat";
-import { useGetRooms } from "../../hooks/useRooms";
-import useAppStore from "../../stores/useAppStore";
+import { useGetRooms, useUpdateRoom } from "../../hooks/useRooms";
 import WholeElementLoader from "../CrossApp/WholeElementLoader";
 import ServerDown from "../../assets/illustrations/ServerDown";
-import { lsWrite } from "../../utils/ls.io";
 import { useEffect } from "react";
+import useSearchAndFilter from "../../hooks/useSearchAndFilter";
+import Loader from "../CrossApp/Loader";
+import { COLOR_SCHEMA } from "../../utils/constants";
+import useChatStore from "../../stores/ChatStore";
 
 const ListRooms = () => {
   const { isError, isFetching, isSuccess } = useGetRooms();
+  const { isUpdatingRoomsAfterUpdateOfARoom } = useUpdateRoom();
 
-  const { rooms, setCurrentRoom, setRooms, currentRoom } = useAppStore();
+  const { rooms, setRooms } = useChatStore();
 
-  let isActive = (id: string) => currentRoom?._id === id;
+  const { pending } = useSearchAndFilter();
 
   useEffect(() => () => setRooms(undefined), []);
 
   return (
     <div className="list__rooms">
-      {isFetching ? (
+      {pending || isUpdatingRoomsAfterUpdateOfARoom ? (
+        <WholeElementLoader
+          loader={
+            <Loader
+              height={100}
+              width={100}
+              ringColor={COLOR_SCHEMA.whity}
+              trackColor={COLOR_SCHEMA.accent}
+            />
+          }
+        />
+      ) : isFetching ? (
         <WholeElementLoader />
       ) : isError ? (
         <Placeholder message="Oups ! Une erreur réseau est survenue !">
@@ -28,18 +42,7 @@ const ListRooms = () => {
       ) : isSuccess && rooms.length !== 0 ? (
         <ul>
           {rooms.map((room) => {
-            return (
-              <li
-                key={room._id}
-                className={isActive(room._id) ? "active" : undefined}
-                onClick={() => {
-                  setCurrentRoom(room);
-                  lsWrite("current-room", room);
-                }}
-              >
-                <RoomElt room={room} />
-              </li>
-            );
+            return <RoomElt room={room} key={room._id} />;
           })}
         </ul>
       ) : isSuccess && rooms.length == 0 ? (

@@ -3,7 +3,7 @@ import { memo } from "react";
 import { useAuthenticate } from "../../hooks/useAuth";
 import Loader from "../CrossApp/Loader";
 import { formatUserName } from "../../utils/formatters";
-import useAppStore from "../../stores/useAppStore";
+import useAppStore from "../../stores/AppStore";
 import { Link } from "react-router-dom";
 
 const BottomActions = memo(() => {
@@ -23,7 +23,7 @@ const BottomActions = memo(() => {
         <button type="button" className="action">
           <User size={20} />
         </button>
-        <Link to="/" type="button" className="action">
+        <Link to="/#about" type="button" className="action">
           <Info size={20} />
         </Link>
         <button

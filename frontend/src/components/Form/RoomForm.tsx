@@ -1,5 +1,5 @@
 import { XCircle } from "@phosphor-icons/react";
-import useAppStore from "../../stores/useAppStore";
+import useAppStore from "../../stores/AppStore";
 import { useState } from "react";
 import { RoomType } from "../../utils/@types";
 import { useCreateRoom } from "../../hooks/useRooms";

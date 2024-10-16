@@ -1,5 +1,5 @@
 import { MagnifyingGlass } from "@phosphor-icons/react";
-import useSearchAndFilterStore from "../../stores/useSearchAndFilterStore";
+import useSearchAndFilterStore from "../../stores/SearchAndFilterStore";
 import useSearchAndFilter from "../../hooks/useSearchAndFilter";
 import Loader from "../CrossApp/Loader";
 import { COLOR_SCHEMA } from "../../utils/constants";

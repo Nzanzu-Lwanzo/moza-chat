@@ -1,0 +1,37 @@
+[
+    {
+        "name" : "Amuli Ngobi",
+        "email" : "ngobi@gmail.com",
+        "password" : "password"
+    },
+    {
+      "name": "Queen Mughole",
+      "email": "queen@gmail.com",
+      "password": "password"
+    },
+    {
+      "name": "Muyisa KAMBALE",
+      "email": "muyisa@gmail.com",
+      "password": "password"
+    },
+    {
+      "name": "Marcus Garvey",
+      "email": "marcus@gmail.com",
+      "password": "password"
+    },
+    {
+      "name": "Malcolm X",
+      "email": "malcolm@gmail.com",
+      "password": "password"
+    },
+    {
+      "name": "José Marti Pérez",
+      "email": "josemarti@gmail.com",
+      "password": "password"
+    },
+    {
+      "name": "Kunta Kinte",
+      "email": "kinte@gmail.com",
+      "password": "password"
+    }
+]

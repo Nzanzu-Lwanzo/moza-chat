@@ -2,7 +2,7 @@ import { useMutation } from "@tanstack/react-query";
 import Axios, { AxiosError } from "axios";
 import { UserType, LogInUserType, SignUpUserType } from "../utils/@types";
 import { BASE_URL } from "../utils/constants";
-import useAppStore from "../stores/useAppStore";
+import useAppStore from "../stores/AppStore";
 import { enqueueSnackbar } from "notistack";
 import { useNavigate } from "react-router-dom";
 import { lsWrite } from "../utils/ls.io";
