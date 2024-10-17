@@ -14,6 +14,8 @@ import passport from "passport";
 import { authenticateRequests } from "./backend/utils/middlewares.mjs";
 import MongoStore from "connect-mongo";
 import cors from "cors";
+import { createServer } from "node:http";
+import { Server } from "socket.io";
 
 const App = express();
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -25,6 +27,20 @@ const WHITELIST_ORIGINS = ["http://localhost:5000", "http://localhost:5173"];
 let cookiesMaxAge = 60 * 60 * 24 * 30 * 1500;
 let storeSessionExpiryDate = 60 * 60 * 24 * 30 * 1500;
 let refreshStoredSessionInterval = 24 * 3600;
+const corsOptions = {
+  origin: WHITELIST_ORIGINS,
+  methods: ["GET", "POST", "PATCH", "DELETE"],
+  credentials: true,
+  // maxAge : 5 * 60000
+};
+const server = createServer(App);
+const io = new Server(server, {
+  cors: corsOptions,
+  connectionStateRecovery: {
+    maxDisconnectionDuration: 25000,
+    skipMiddlewares: true,
+  },
+});
 
 App.use(express.json());
 App.use(express.static(join(__dirname, "/frontend/dist")));
@@ -39,14 +55,7 @@ App.use((req, res, next) => {
   next();
 });
 
-App.use(
-  cors({
-    origin: WHITELIST_ORIGINS,
-    methods: ["GET", "POST", "PATCH", "DELETE"],
-    credentials: true,
-    // maxAge : 5 * 60000
-  })
-);
+App.use(cors(corsOptions));
 App.use(cookieParser());
 App.use(
   session({
@@ -77,7 +86,15 @@ App.use("/api/message", messageRouter);
 App.use("/api/room", roomRouter);
 App.get("*", (req, res) => res.sendFile("/index.html"));
 
-App.listen(PORT, () => {
+io.on("connection", (socket) => {
+  console.log("User connected with id : ", socket.id);
+
+  socket.on("disconnect", () => {
+    console.log("User disconnected with id : ", socket.id);
+  });
+});
+
+server.listen(PORT, () => {
   console.log("SERVER UP AND RUNNING");
   mongoose
     .connect(MONGODB_URI, {

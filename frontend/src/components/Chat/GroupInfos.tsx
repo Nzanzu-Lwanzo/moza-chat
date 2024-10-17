@@ -12,7 +12,7 @@ import { useReducer, useState } from "react";
 import { formatDate } from "../../utils/formatters";
 import AllUsers from "./AllUsers";
 import RoomUsers from "./RoomUsers";
-import EditRoomForm from "./EditRoomForm";
+import EditRoomForm from "../Form/EditRoomForm";
 import { useHasCredentialsOnRoom } from "../../hooks/useValidate";
 import { useDeleteRoom } from "../../hooks/useRooms";
 import Loader from "../CrossApp/Loader";

@@ -1,10 +1,11 @@
 
 let RUNENV: "dev" | "prod" = "dev";
 
-const COLOR_SCHEMA: Record<string, string> = {
+const COLOR_SCHEMA = {
   dark: "#1B1A1F",
   accent: "#f97300",
   whity: "#e2dfd0",
+  secondDark: "#524c42",
 };
 
 const ORIGIN =

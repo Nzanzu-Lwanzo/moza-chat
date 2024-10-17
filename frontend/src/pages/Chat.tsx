@@ -6,26 +6,29 @@ import Modal from "../components/CrossApp/Modal";
 import NoChatSelected from "../components/Chat/NoChatSelected";
 import ChatRoom from "../components/Chat/ChatRoom";
 import useChatStore from "../stores/ChatStore";
+import { SocketContextProvider } from "../contexts/socketContext";
 
 const Chat = () => {
   const { currentRoom } = useChatStore();
 
   return (
-    <main className="chat__page">
-      <div className="chat__card">
-        <div className="part">
-          <SearchAndFilter />
-          <ListRooms />
-          <BottomActions />
+    <SocketContextProvider>
+      <main className="chat__page">
+        <div className="chat__card">
+          <div className="part">
+            <SearchAndFilter />
+            <ListRooms />
+            <BottomActions />
+          </div>
+
+          <div className="part dark__theme">
+            {!currentRoom ? <NoChatSelected></NoChatSelected> : <ChatRoom />}
+          </div>
         </div>
 
-        <div className="part dark__theme">
-          {!currentRoom ? <NoChatSelected></NoChatSelected> : <ChatRoom />}
-        </div>
-      </div>
-
-      <Modal></Modal>
-    </main>
+        <Modal></Modal>
+      </main>
+    </SocketContextProvider>
   );
 };
 
