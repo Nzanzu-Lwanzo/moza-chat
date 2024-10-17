@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState, useTransition } from "react";
 import useAppStore from "../stores/AppStore";
 import { State } from "../stores/SearchAndFilterStore";
 import { idbConnection } from "../db/connection";
-import { RoomType } from "../utils/@types";
+import { RoomType, UserType } from "../utils/@types";
 import { enqueueSnackbar } from "notistack";
 import useChatStore from "../stores/ChatStore";
 
@@ -20,7 +20,7 @@ const useSearchAndFilter = () => {
         enqueueSnackbar("Rooms non récupérées pour filtrage !");
         console.log(e);
       });
-  }, [rooms]); // Watch for rooms state, in case a new room has just been created
+  }, [rooms, auth]); // Watch for rooms state, in case a new room has just been created
 
   const forSearchRooms = useMemo(() => {
     return idbRooms.filter((room) => {
@@ -75,7 +75,16 @@ const useSearchAndFilter = () => {
         case "PARTICIPANT": {
           setTransition(() => {
             setRoomsAndReplace(
-              idbRooms.filter((room) => room.participants?.includes(auth?._id))
+              idbRooms.filter((room) => {
+                return (
+                  room.participants?.includes(auth?._id) ||
+                  room.participants
+                    ?.map((user) => {
+                      return (user as UserType)._id;
+                    })
+                    .includes(auth!._id)
+                );
+              })
             );
           });
 

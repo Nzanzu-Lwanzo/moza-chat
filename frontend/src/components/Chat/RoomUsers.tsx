@@ -6,13 +6,20 @@ import Avatar from "boring-avatars";
 import { useState } from "react";
 import { useUpdateRoom } from "../../hooks/useRooms";
 import Loader from "../CrossApp/Loader";
-import { useHasCredentialsOnRoom } from "../../hooks/useValidate";
+import { useHasRoomAdminCreds } from "../../hooks/useValidate";
+import useAppStore from "../../stores/AppStore";
 
 const RoomUsers = () => {
   const currentRoom = useChatStore((state) => state.currentRoom);
-  let hasCreds = useHasCredentialsOnRoom();
+  const auth = useAppStore((state) => state.auth);
   const [selectedUsers, selectUser] = useState<string[]>([]);
-  const { mutate, isPending } = useUpdateRoom();
+  const { mutate, isPending } = useUpdateRoom({
+    onSuccess() {
+      selectUser([]);
+    },
+  });
+
+  let hasAdminCreds = useHasRoomAdminCreds(auth!, currentRoom!);
 
   return (
     <>
@@ -44,32 +51,39 @@ const RoomUsers = () => {
           let user = participant as UserType;
 
           return (
-            <li key={user._id}>
+            <li key={`${user._id}${user.name}`}>
               <div className="user">
                 <Avatar size={25} name={user.name} />
                 <span>
                   {user.name} [ {user.email} ]
                 </span>
+                {user._id === auth?._id && (
+                  <span className="cell">Administrateur</span>
+                )}
               </div>
 
-              {hasCreds && (
+              {hasAdminCreds && auth?._id !== user._id && (
                 <div className="actions">
-                  <input
-                    type="checkbox"
-                    style={{ accentColor: COLOR_SCHEMA.accent }}
-                    value={user._id}
-                    name="input__select__user"
-                    id="input__select__user"
-                    onChange={(e) => {
-                      let { checked, value } = e.target;
+                  {useHasRoomAdminCreds(user, currentRoom) && (
+                    <input
+                      type="checkbox"
+                      style={{ accentColor: COLOR_SCHEMA.accent }}
+                      value={user._id}
+                      name="input__select__user"
+                      id="input__select__user"
+                      onChange={(e) => {
+                        let { checked, value } = e.target;
 
-                      if (checked) {
-                        selectUser((prev) => [...prev, value]);
-                      } else {
-                        selectUser((prev) => prev.filter((id) => id !== value));
-                      }
-                    }}
-                  />
+                        if (checked) {
+                          selectUser((prev) => [...prev, value]);
+                        } else {
+                          selectUser((prev) =>
+                            prev.filter((id) => id !== value)
+                          );
+                        }
+                      }}
+                    />
+                  )}
                 </div>
               )}
             </li>

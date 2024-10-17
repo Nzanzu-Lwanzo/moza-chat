@@ -13,7 +13,6 @@ import { useHasCredentialsOnRoom } from "../../hooks/useValidate";
 
 const AllUsers = () => {
   const { allUsers: users, currentRoom } = useChatStore();
-  let hasCreds = useHasCredentialsOnRoom();
   const [selectedUsers, selectUser] = useState<string[]>([]);
 
   const usersToAdd = useMemo(() => {
@@ -23,7 +22,7 @@ const AllUsers = () => {
 
     if (!participants) return users;
 
-    const notAddedYet = users!.filter((user) => {
+    const notAddedYet = users?.filter((user) => {
       return !participants
         .map((participant) => (participant as UserType)._id)
         .includes(user._id);
@@ -33,14 +32,13 @@ const AllUsers = () => {
   }, [users, currentRoom]);
 
   const { mutate, isPending } = useUpdateRoom({
-    onSuccess(data) {
-      // data c'est la room à laquelle on vient d'ajouter des participants
-      // Elle contient la liste de tous les participants
-      // chaque participant a un _id, un nom et un email
-
-      console.log(data);
+    onSuccess() {
+      selectUser([]);
     },
   });
+
+  
+  let hasCreds = useHasCredentialsOnRoom();
 
   return (
     <>

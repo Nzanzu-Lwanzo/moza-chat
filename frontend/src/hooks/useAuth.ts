@@ -8,11 +8,13 @@ import { useNavigate } from "react-router-dom";
 import { lsWrite } from "../utils/ls.io";
 import { useCookies } from "react-cookie";
 import { useState } from "react";
+import useChatStore from "../stores/ChatStore";
 
 export const useAuthenticate = () => {
-  const { setAuth, setCurrentRoom } = useAppStore();
+  const { setAuth } = useAppStore();
   const navigateTo = useNavigate();
   const [isLogginOut, setIsLoggingOut] = useState(false);
+  const { setCurrentRoom } = useChatStore();
 
   const { mutate, isPending, isSuccess, isError } = useMutation({
     mutationKey: ["user"],
@@ -74,12 +76,14 @@ export const useAuthenticate = () => {
         });
 
         if (response.status === 200) {
+          // Navigate first
+          navigateTo("/");
+
+          // Do the rest in the background
           setAuth(undefined);
           setCurrentRoom(undefined);
           localStorage.removeItem("current-room");
           localStorage.removeItem("auth-user");
-
-          navigateTo("/");
         }
       } catch (e) {
         let error = e as AxiosError;

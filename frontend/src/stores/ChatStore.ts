@@ -15,6 +15,7 @@ interface Actions {
   setRooms(rooms: State["rooms"] | undefined): void;
   setCurrentRoom(room: State["currentRoom"]): void;
   setRoomsAndReplace(rooms: State["rooms"]): void;
+  deleteRoomFromState(id: string): void;
   setCurrentMainPanel(panel: State["currentMainPanel"]): void;
   setAllUsers(users: State["allUsers"]): void;
 }
@@ -47,6 +48,11 @@ const useChatStore = create<State & Actions>()((set) => ({
   },
   setAllUsers(users) {
     set((state) => ({ ...state, allUsers: users }));
+  },
+  deleteRoomFromState(id) {
+    set((state) => {
+      return { ...state, rooms: state.rooms.filter((room) => room._id !== id) };
+    });
   },
 }));
 

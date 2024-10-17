@@ -12,7 +12,11 @@ export const createAccount = async (req, res) => {
 
 export const getAllUsers = async (req, res) => {
   try {
-    const users = await User.find({}, { password: 0 }, { lean: true });
+    const users = await User.find(
+      { _id: { $ne: req.user._id } },
+      { password: 0 },
+      { lean: true }
+    );
     res.json(users);
   } catch (e) {
     console.log(e);

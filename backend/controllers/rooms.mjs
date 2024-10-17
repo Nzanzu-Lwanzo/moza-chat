@@ -102,7 +102,7 @@ export const deleteRoom = async (req, res) => {
 
   try {
     const deletedRoom = await Room.findByIdAndDelete(id);
-    res.sendStatus(200).json(deletedRoom);
+    res.status(200).json(deletedRoom);
   } catch (e) {
     console.log(e);
     res.sendStatus(400);

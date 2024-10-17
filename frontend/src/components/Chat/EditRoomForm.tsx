@@ -6,6 +6,8 @@ import useChatStore from "../../stores/ChatStore";
 import Loader from "../CrossApp/Loader";
 import { useUpdateRoom } from "../../hooks/useRooms";
 import { enqueueSnackbar } from "notistack";
+import { useHasRoomAdminCreds } from "../../hooks/useValidate";
+import useAppStore from "../../stores/AppStore";
 
 interface Props {
   hideForm(): void;
@@ -13,6 +15,7 @@ interface Props {
 
 const EditRoomForm = ({ hideForm }: PropsWithChildren<Props>) => {
   const currentRoom = useChatStore((state) => state.currentRoom);
+  const auth = useAppStore((state) => state.auth);
 
   const [room, setRoom] = useState<RoomType>(currentRoom!);
   const { mutate, isPending } = useUpdateRoom({
@@ -22,6 +25,9 @@ const EditRoomForm = ({ hideForm }: PropsWithChildren<Props>) => {
 
     onError() {},
   });
+
+  
+  let hasRoomAdminCreds = useHasRoomAdminCreds(auth!,currentRoom!);
 
   return (
     <div className="edit__room__form">
@@ -82,40 +88,47 @@ const EditRoomForm = ({ hideForm }: PropsWithChildren<Props>) => {
             ></textarea>
           </div>
 
-          <div className="wrap__inputs__check">
-            <input
-              type="checkbox"
-              name="restricted"
-              id="restricted"
-              checked={room.restricted}
-              onChange={(e) =>
-                setRoom((prev) => ({ ...prev, restricted: e.target.checked }))
-              }
-            />
-            <label htmlFor="restricted">
-              <span>Restreindre cette room ?</span>
-              <span className={`cell ${room.restricted && "chosen"}`}>
-                restricted
-              </span>
-            </label>
-          </div>
-          <div className="wrap__inputs__check">
-            <input
-              type="checkbox"
-              name="private"
-              id="private"
-              checked={room.private}
-              onChange={(e) =>
-                setRoom((prev) => ({ ...prev, private: e.target.checked }))
-              }
-            />
-            <label htmlFor="private">
-              <span>Rendre cette room privée ?</span>{" "}
-              <span className={`cell ${room.private && "chosen"}`}>
-                private
-              </span>
-            </label>
-          </div>
+          {hasRoomAdminCreds && (
+            <>
+              <div className="wrap__inputs__check">
+                <input
+                  type="checkbox"
+                  name="restricted"
+                  id="restricted"
+                  checked={room.restricted}
+                  onChange={(e) =>
+                    setRoom((prev) => ({
+                      ...prev,
+                      restricted: e.target.checked,
+                    }))
+                  }
+                />
+                <label htmlFor="restricted">
+                  <span>Restreindre cette room ?</span>
+                  <span className={`cell ${room.restricted && "chosen"}`}>
+                    restricted
+                  </span>
+                </label>
+              </div>
+              <div className="wrap__inputs__check">
+                <input
+                  type="checkbox"
+                  name="private"
+                  id="private"
+                  checked={room.private}
+                  onChange={(e) =>
+                    setRoom((prev) => ({ ...prev, private: e.target.checked }))
+                  }
+                />
+                <label htmlFor="private">
+                  <span>Rendre cette room privée ?</span>{" "}
+                  <span className={`cell ${room.private && "chosen"}`}>
+                    private
+                  </span>
+                </label>
+              </div>
+            </>
+          )}
 
           <button type="submit" className="submit__button">
             {isPending ? (

@@ -17,7 +17,6 @@ import { useHasCredentialsOnRoom } from "../../hooks/useValidate";
 import { useDeleteRoom } from "../../hooks/useRooms";
 import Loader from "../CrossApp/Loader";
 
-
 type ActionType = "all_users" | "room_users" | "edit_form";
 
 interface Actions {
@@ -39,7 +38,14 @@ const GroupInfos = () => {
   const { setCurrentMainPanel, currentRoom } = useChatStore();
   const [showDetails, setShowDetails] = useState(true);
   const [currentSection, switchToSection] = useReducer(reducer, "room_users");
-  const { mutate:deleteRoom, isPending:isDeleting } = useDeleteRoom();
+  const { mutate: deleteRoom, isPending: isDeleting } = useDeleteRoom({
+    onSuccess() {
+      // RESET ALL THE LOCAL STATES
+      setCurrentMainPanel("MESSAGES");
+      setShowDetails(true);
+      switchToSection({ section: "room_users" });
+    },
+  });
 
   let hasCreds = useHasCredentialsOnRoom();
 
@@ -96,7 +102,9 @@ const GroupInfos = () => {
               <button
                 type="button"
                 className="icon__btn__on__dark"
-                onClick={() => deleteRoom(currentRoom?._id)}
+                onClick={() => {
+                  deleteRoom(currentRoom?._id);
+                }}
               >
                 {isDeleting ? (
                   <Loader
@@ -112,7 +120,10 @@ const GroupInfos = () => {
               <button
                 type="button"
                 className="icon__btn__on__dark"
-                onClick={() => switchToSection({ section: "edit_form" })}
+                onClick={() => {
+                  switchToSection({ section: "edit_form" });
+                  setShowDetails(true);
+                }}
               >
                 <MarkerCircle size={20} fill={COLOR_SCHEMA.whity} />
               </button>
@@ -126,7 +137,13 @@ const GroupInfos = () => {
         {showDetails && currentSection !== "edit_form" && (
           <div className="infos">
             <h2>{currentRoom?.name}</h2>
-            {currentRoom?.description && <p>{currentRoom?.description}</p>}
+            {currentRoom?.description ? (
+              <p>{currentRoom?.description}</p>
+            ) : (
+              <p>
+                L'auteur de cette Chat Room n'a fourni aucune description ...
+              </p>
+            )}
             <div className="tags">
               {currentRoom?.restricted && (
                 <span className="tag">#Restreinte</span>

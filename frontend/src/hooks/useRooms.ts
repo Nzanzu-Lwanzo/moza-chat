@@ -171,12 +171,15 @@ interface UpdateMutateType {
   data: string[] | RoomType;
 }
 
-interface UpdateHookType {
+interface HookCallbacksType {
   onSuccess?(data: AxiosResponse["data"]): void;
   onError?(error: AxiosError["response"]): void;
 }
 
-export const useUpdateRoom = ({ onSuccess, onError }: UpdateHookType = {}) => {
+export const useUpdateRoom = ({
+  onSuccess,
+  onError,
+}: HookCallbacksType = {}) => {
   const { setCurrentRoom, setRoomsAndReplace } = useChatStore();
   const [isUpdatingRoomsAfterUpdateOfARoom, startTransition] = useTransition();
 
@@ -247,7 +250,12 @@ export const useUpdateRoom = ({ onSuccess, onError }: UpdateHookType = {}) => {
   };
 };
 
-export const useDeleteRoom = () => {
+export const useDeleteRoom = ({
+  onSuccess,
+  onError,
+}: HookCallbacksType = {}) => {
+  const { setCurrentRoom, deleteRoomFromState } = useChatStore();
+
   const { mutate, isPending } = useMutation({
     mutationKey: ["room"],
     mutationFn: async (id: string | undefined) => {
@@ -261,11 +269,37 @@ export const useDeleteRoom = () => {
           withCredentials: true,
         });
 
-        console.log(response.data);
+        if(response.status < 400) {
+          enqueueSnackbar("Chat Room supprimée avec succès !");
+        }
+
+        let { _id } = response.data as RoomType;
+
+        // Remove room from states
+        deleteRoomFromState(_id);
+
+        // Remove the current state
+        setCurrentRoom(undefined);
+
+        // Let the user perform an action
+        if (onSuccess && typeof onSuccess === "function")
+          onSuccess(response.data);
+
+        // Delete from indexDB database
+        idbConnection.remove({
+          from: "rooms",
+          where: { _id: _id },
+        });
+
+        // Delete the messages of this room from indexedDB
+  
 
         return response.data;
       } catch (e) {
         console.log(e);
+        if (onError && typeof onError === "function")
+          onError((e as AxiosError).response);
+
         enqueueSnackbar("Chat Room non supprimée ! ");
       }
     },
