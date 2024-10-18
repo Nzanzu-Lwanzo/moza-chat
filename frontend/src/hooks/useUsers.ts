@@ -1,9 +1,9 @@
 import { useMutation } from "@tanstack/react-query";
 import Axios from "axios";
 import { BASE_URL } from "../utils/constants";
-import { RoomType } from "../utils/@types";
+import { RoomType, UserType } from "../utils/@types";
 import useChatStore from "../stores/ChatStore";
-import { useTransition } from "react";
+import { useState } from "react";
 import { idbConnection } from "../db/connection";
 import { enqueueSnackbar } from "notistack";
 
@@ -94,4 +94,44 @@ export const useJoinRoom = () => {
   });
 
   return { mutate, isPending };
+};
+
+export const useGetAllUsers = () => {
+  const setAllUsers = useChatStore((state) => state.setAllUsers);
+  const [status, setStatus] = useState<
+    "stable" | "pending" | "error" | "success"
+  >("stable");
+
+  return {
+    requestAll: async () => {
+      setStatus("pending");
+      try {
+        const response = await Axios.get(BASE_URL.concat("/user/"), {
+          withCredentials: true,
+        });
+
+        setStatus("success");
+
+        const users = response.data as UserType[];
+
+        setAllUsers(users);
+
+        idbConnection.insert({
+          into: "users",
+          values: users,
+          upsert: true,
+          ignore: true,
+          skipDataCheck: true,
+        });
+
+        return users;
+      } catch (e) {
+        setStatus("error");
+        enqueueSnackbar("Erreur : liste d'utilisateurs non recupérée !");
+      }
+    },
+
+    status,
+    setStatus,
+  };
 };

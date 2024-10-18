@@ -4,7 +4,6 @@ import { filesEnum } from "../database/models/messages.mjs";
 
 export const createMessage = async (message) => {
   const createdMessage = await Message.create(message);
-
   return createdMessage;
 };
 

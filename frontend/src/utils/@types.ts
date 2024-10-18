@@ -16,7 +16,7 @@ export interface RoomType {
   private: boolean;
   likes: number;
   createdAt: string;
-  updatedAt: true;
+  updatedAt: string;
   initiated_by?: UserType;
 }
 
@@ -26,6 +26,8 @@ export interface MessageType {
   sendee: UserType;
   room: RoomType;
   refBy?: string[];
+  createdAt: string;
+  updatedAt: string;
 }
 
 export type LogInUserType = Pick<UserType, "name" | "password">;

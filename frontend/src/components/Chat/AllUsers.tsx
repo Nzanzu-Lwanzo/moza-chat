@@ -10,10 +10,12 @@ import { useUpdateRoom } from "../../hooks/useRooms";
 import WholeElementLoader from "../CrossApp/WholeElementLoader";
 import Loader from "../CrossApp/Loader";
 import { useHasCredentialsOnRoom } from "../../hooks/useValidate";
+import { useGetAllUsers } from "../../hooks/useUsers";
 
 const AllUsers = () => {
   const { allUsers: users, currentRoom } = useChatStore();
   const [selectedUsers, selectUser] = useState<string[]>([]);
+  const { requestAll, status: getAllStatus } = useGetAllUsers();
 
   const usersToAdd = useMemo(() => {
     // Liste des participants : peut être une liste de strings ou une liste d'objets
@@ -37,23 +39,36 @@ const AllUsers = () => {
     },
   });
 
-  
   let hasCreds = useHasCredentialsOnRoom();
+  let isRequestingAll = getAllStatus === "pending";
 
   return (
     <>
       {hasCreds ? (
         <>
-          {!isPending ? (
+          {!isPending && !isRequestingAll ? (
             <>
               <div className="users__topbar">
                 <h2>Ajouter des utilisateurs</h2>
                 <div className="actions">
-                  <button type="button" className="icon__btn__on__dark">
-                    <ArrowsCounterClockwise
-                      size={20}
-                      fill={COLOR_SCHEMA.whity}
-                    />
+                  <button
+                    type="button"
+                    className="icon__btn__on__dark"
+                    onClick={requestAll}
+                  >
+                    {isRequestingAll ? (
+                      <Loader
+                        height={15}
+                        width={15}
+                        trackColor={COLOR_SCHEMA.accent}
+                        ringColor={COLOR_SCHEMA.whity}
+                      />
+                    ) : (
+                      <ArrowsCounterClockwise
+                        size={20}
+                        fill={COLOR_SCHEMA.whity}
+                      />
+                    )}
                   </button>
                   {selectedUsers.length !== 0 && (
                     <button

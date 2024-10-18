@@ -5,6 +5,7 @@
     background-color: $dark;
     min-height: 50vh;
     padding: 1rem;
+    width: 100%;
   }
 
   header {
@@ -30,6 +31,7 @@
     padding: 2rem;
     position: relative;
     gap: 3rem;
+    width: 100%;
 
     .text {
       display: flex;
@@ -67,10 +69,18 @@
   margin: auto;
   padding: 2rem 1rem;
 
-  line-height: 1.5rem;
+  line-height: 1.7rem;
 
   h1 {
     font-size: 2rem;
+  }
+
+  a {
+    color: blue;
+  }
+
+  strong {
+    font-weight: bold;
   }
 
   p {
@@ -79,5 +89,63 @@
 
   & > * {
     margin-bottom: 0.8rem;
+    line-height: 1.7;
+  }
+
+  ul {
+    padding-inline: 2rem;
+  }
+}
+
+// MEDIA QUERIES
+@media only all and (max-width: 1100px) {
+  .content {
+    width: 80vw;
+  }
+}
+
+@media only all and (max-width: 720px) {
+  .home__page .banner__text {
+    gap: 1rem;
+    flex-direction: column-reverse;
+  }
+}
+
+@media only all and (max-width: 500px) {
+  .no__state__button,
+  .home__page .btn:first-of-type,
+  .no__state__button__reverse,
+  .home__page .btn:last-of-type {
+    padding: 0.5rem;
+    font-size: 0.75rem;
+  }
+
+  .content {
+    width: 95%;
+  }
+
+  .home__page .banner {
+    padding: 1.5rem;
+  }
+
+  .home__page .banner__text {
+    padding-inline: 0;
+  }
+
+  .home__page .banner__text .text {
+    gap: 0.5rem;
+    width: 100%;
+
+    h1 {
+      font-size: 2.5rem;
+    }
+
+    p {
+      font-size: 0.85rem;
+    }
+
+    .cta {
+      font-size: 0.7rem;
+    }
   }
 }

@@ -10,7 +10,7 @@ import { COLOR_SCHEMA } from "../../utils/constants";
 import MessagesList from "./MessagesList";
 import useChatStore from "../../stores/ChatStore";
 import { PanelType } from "../../stores/ChatStore";
-import GroupInfos from "./GroupInfos";
+import RoomInfos from "./RoomInfos";
 import { useState } from "react";
 import ChatRoomMenuActions from "./ChatRoomMenuActions";
 import { useIsUserInCurrentRoom } from "../../hooks/useValidate";
@@ -21,7 +21,7 @@ import MessageForm from "../Form/MessageForm";
 
 const MAP_PANELS: Partial<Record<PanelType, React.ReactElement>> = {
   MESSAGES: <MessagesList />,
-  GROUP_INFOS: <GroupInfos />,
+  GROUP_INFOS: <RoomInfos />,
 };
 
 const ChatRoom = () => {
@@ -74,9 +74,7 @@ const ChatRoom = () => {
 
       {MAP_PANELS[currentMainPanel]}
 
-      {currentMainPanel === "MESSAGES" && (
-        <MessageForm></MessageForm>
-      )}
+      {currentMainPanel === "MESSAGES" && <MessageForm></MessageForm>}
 
       {!isUserInCurrentRoom && (
         <div className="join__panel">

@@ -16,6 +16,7 @@ import EditRoomForm from "../Form/EditRoomForm";
 import { useHasCredentialsOnRoom } from "../../hooks/useValidate";
 import { useDeleteRoom } from "../../hooks/useRooms";
 import Loader from "../CrossApp/Loader";
+import { convert } from "html-to-text";
 
 type ActionType = "all_users" | "room_users" | "edit_form";
 
@@ -34,7 +35,7 @@ const reducer = (state: ActionType, action: Actions) => {
   }
 };
 
-const GroupInfos = () => {
+const RoomInfos = () => {
   const { setCurrentMainPanel, currentRoom } = useChatStore();
   const [showDetails, setShowDetails] = useState(true);
   const [currentSection, switchToSection] = useReducer(reducer, "room_users");
@@ -138,7 +139,7 @@ const GroupInfos = () => {
           <div className="infos">
             <h2>{currentRoom?.name}</h2>
             {currentRoom?.description ? (
-              <p>{currentRoom?.description}</p>
+              <p>{convert(currentRoom?.description)}</p>
             ) : (
               <p>
                 L'auteur de cette Chat Room n'a fourni aucune description ...
@@ -174,4 +175,4 @@ const GroupInfos = () => {
   );
 };
 
-export default GroupInfos;
+export default RoomInfos;

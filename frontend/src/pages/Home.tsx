@@ -36,6 +36,59 @@ const Home = () => {
 
       <section className="content" id="about">
         <h1>Au sujet de Moza Chat</h1>
+        <p>
+          <strong>Moza Chat</strong> est une application Web de Chat en temps
+          réel développée par{" "}
+          <Link to="https://github.com/Nzanzu-Lwanzo">NZANZU MUHAYRWA L.</Link>,
+          programmeur et écrivain.
+        </p>
+
+        <h2>Comment Moza Chat fonctionne ?</h2>
+        <p>
+          Moza Chat permet aux utilisateurs de créer et/ou joindre des Chat
+          Rooms. Une Chat Room, c'est comme un groupe que les gens peuvent
+          joindre pour chater. <br />
+          Il existe deux types de Chat Room :
+        </p>
+        <ul>
+          <li>
+            <p>
+              <strong>Chat Room Privée</strong> : c'est une Chat Room qui n'est
+              pas visible par le grand public. On ne peut y accéder que si le
+              créateur lui-même nous y a ajouté.
+            </p>
+          </li>
+          <li>
+            <p>
+              <strong>Chat Room Publique</strong> : c'est une Chat Room qui est
+              visible par le grand public. Il suffit de le joindre et de
+              commencer à chater.
+            </p>
+          </li>
+        </ul>
+
+        <h2>Confidentialité de données</h2>
+        <p>
+          Moza Chat requiert que vous ayez un compte. Toutes vos données sont
+          stockées sur une cluster securisé et vous avez la possibilité de les
+          supprimer quand vous vouler, les modifier quand vous voulez. De plus,
+          vous avez la liberté de quitter une Chat Room quand vous voulez, sans
+          que personne ne le sache. Et vous pouvez choisir, avant de quitter une
+          Chat Room, de supprimer tous les messages que vous aurez envoyé dans
+          cette Chat Room.
+        </p>
+
+        <h2>Considérations techniques</h2>
+        <p>
+          Moza Chat fonctionne avec une BDD cloud et une BDD locale c'est-à-dire
+          une BDD qui est éloignée de vous (un serveur) et une BDD qui est
+          directement sur votre téléphone. Cela pour permettre la rapidité avec
+          laquelle vous pouvez accéder aux données dont vous avez besoin (les
+          messages, les rooms, les utilisateurs, ...).
+          <br />
+          S'il arrive pour quelque raison que l'application dysfonctionne,
+          rafraîchissez la page (ça marche à tous les coups)!
+        </p>
       </section>
     </main>
   );

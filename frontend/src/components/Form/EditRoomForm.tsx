@@ -8,6 +8,7 @@ import { useUpdateRoom } from "../../hooks/useRooms";
 import { enqueueSnackbar } from "notistack";
 import { useHasRoomAdminCreds } from "../../hooks/useValidate";
 import useAppStore from "../../stores/AppStore";
+import { convert } from "html-to-text";
 
 interface Props {
   hideForm(): void;
@@ -17,7 +18,10 @@ const EditRoomForm = ({ hideForm }: PropsWithChildren<Props>) => {
   const currentRoom = useChatStore((state) => state.currentRoom);
   const auth = useAppStore((state) => state.auth);
 
-  const [room, setRoom] = useState<RoomType>(currentRoom!);
+  const [room, setRoom] = useState<RoomType>({
+    ...currentRoom!,
+    description: convert(currentRoom?.description || ""),
+  });
   const { mutate, isPending } = useUpdateRoom({
     onSuccess() {
       hideForm();
@@ -26,8 +30,7 @@ const EditRoomForm = ({ hideForm }: PropsWithChildren<Props>) => {
     onError() {},
   });
 
-  
-  let hasRoomAdminCreds = useHasRoomAdminCreds(auth!,currentRoom!);
+  let hasRoomAdminCreds = useHasRoomAdminCreds(auth!, currentRoom!);
 
   return (
     <div className="edit__room__form">

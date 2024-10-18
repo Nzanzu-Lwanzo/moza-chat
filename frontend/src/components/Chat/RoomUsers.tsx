@@ -1,6 +1,5 @@
 import useChatStore from "../../stores/ChatStore";
 import { UserType } from "../../utils/@types";
-import { ArrowsCounterClockwise } from "@phosphor-icons/react";
 import { COLOR_SCHEMA } from "../../utils/constants";
 import Avatar from "boring-avatars";
 import { useState } from "react";
@@ -26,9 +25,6 @@ const RoomUsers = () => {
       <div className="users__topbar">
         <h2>Tous les participants</h2>
         <div className="actions">
-          <button type="button" className="icon__btn__on__dark">
-            <ArrowsCounterClockwise size={20} fill={COLOR_SCHEMA.whity} />
-          </button>
           {selectedUsers.length !== 0 && (
             <button
               type="button"
@@ -50,6 +46,8 @@ const RoomUsers = () => {
         {currentRoom?.participants?.map((participant) => {
           let user = participant as UserType;
 
+          console.log(user._id === currentRoom.initiated_by?._id);
+
           return (
             <li key={`${user._id}${user.name}`}>
               <div className="user">
@@ -57,7 +55,7 @@ const RoomUsers = () => {
                 <span>
                   {user.name} [ {user.email} ]
                 </span>
-                {user._id === auth?._id && (
+                {user._id === currentRoom.initiated_by?._id && (
                   <span className="cell">Administrateur</span>
                 )}
               </div>
