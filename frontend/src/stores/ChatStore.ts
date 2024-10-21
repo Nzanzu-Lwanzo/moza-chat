@@ -20,6 +20,9 @@ interface Actions {
   setCurrentMainPanel(panel: State["currentMainPanel"]): void;
   setAllUsers(users: State["allUsers"]): void;
   setChatRoomVisibilityOnMobile(visible: boolean): void;
+  addMessage(message: MessageType): void;
+  deleteMessage(id: string): void;
+  deleteAuthMessages(id: string | undefined): void;
 }
 
 const useChatStore = create<State & Actions>()((set) => ({
@@ -59,6 +62,25 @@ const useChatStore = create<State & Actions>()((set) => ({
   },
   setChatRoomVisibilityOnMobile(visible) {
     set((state) => ({ ...state, chatRoomVisibleOnMobile: visible }));
+  },
+  addMessage(message) {
+    set((state) => ({ ...state, messages: [...state.messages, message] }));
+  },
+  deleteMessage(id) {
+    set((state) => ({
+      ...state,
+      messages: state.messages.filter((message) => message._id !== id),
+    }));
+  },
+  deleteAuthMessages(id) {
+    set((state) => ({
+      ...state,
+      messages: id
+        ? state.messages.filter((message) => {
+            return message.sendee._id !== id;
+          })
+        : state.messages,
+    }));
   },
 }));
 

@@ -1,9 +1,25 @@
 import Message from "../database/models/messages.mjs";
 import Room from "../database/models/rooms.mjs";
 import { filesEnum } from "../database/models/messages.mjs";
+import { Server } from "socket.io";
 
-export const createMessage = async (message) => {
-  const createdMessage = await Message.create(message);
+/**
+ *
+ * @param {object}} message
+ * @param {Server} io
+ * @returns {Message}
+ */
+export const createMessage = async (message, send) => {
+  const createdMessage = (await Message.create(message)).populate({
+    path: "sendee",
+    select: "_id name",
+  });
+
+  // This operation can be performed after
+  await Room.findByIdAndUpdate(message.room, {
+    $addToSet: { messages: (await createdMessage)._id },
+  });
+
   return createdMessage;
 };
 
@@ -15,6 +31,17 @@ export const deleteMessage = async (req, res) => {
     let roomId = deletedMessage.room;
     let messageId = deletedMessage._id;
     await Room.findByIdAndUpdate(roomId, { $pull: { messages: messageId } });
+
+    res.sendStatus(204);
+  } catch (e) {
+    console.log(e);
+    res.sendStatus(400);
+  }
+};
+
+export const deleteAllUserMessagesFromRoom = async (req, res) => {
+  try {
+    const deletedMessages = await Message.deleteMany({ sendee: req.user._id });
 
     res.sendStatus(204);
   } catch (e) {

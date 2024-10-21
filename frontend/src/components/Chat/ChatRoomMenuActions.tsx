@@ -1,3 +1,4 @@
+import { useDeleteMessages } from "../../hooks/useMessages";
 import { useDeleteRoom } from "../../hooks/useRooms";
 import { useQuitRoom } from "../../hooks/useUsers";
 import { useHasRoomAdminCreds } from "../../hooks/useValidate";
@@ -14,10 +15,13 @@ const ChatRoomMenuActions = () => {
       setCurrentMainPanel("MESSAGES");
     },
   });
+  const { mutate: quitRoom, isPending: isQuittingRoom } = useQuitRoom();
+
   const {
-    mutate: quitRoom,
-    isPending: isQuittingRoom,
-  } = useQuitRoom();
+    isDeleting: isDeletingMessages,
+    isPending,
+    mutate,
+  } = useDeleteMessages();
 
   return (
     <>
@@ -34,8 +38,16 @@ const ChatRoomMenuActions = () => {
           )}
         </button>
       )}
-      <button type="button" className="">
-        Supprimer mes messages
+      <button
+        type="button"
+        className=""
+        onClick={() => mutate(currentRoom?._id)}
+      >
+        {isDeletingMessages || isPending ? (
+          <Loader height={15} width={15}></Loader>
+        ) : (
+          "Supprimer mes messages"
+        )}
       </button>
 
       {hasAdminCreds && (

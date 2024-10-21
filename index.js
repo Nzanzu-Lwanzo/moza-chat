@@ -16,6 +16,7 @@ import MongoStore from "connect-mongo";
 import cors from "cors";
 import { createServer } from "node:http";
 import { Server } from "socket.io";
+import { createMessage } from "./backend/controllers/messages.mjs";
 
 const App = express();
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -87,10 +88,15 @@ App.use("/api/room", roomRouter);
 App.get("*", (req, res) => res.sendFile("/index.html"));
 
 io.on("connection", (socket) => {
-  console.log("User connected with id : ", socket.id);
+  socket.on("join_room", (room_id) => {
+    socket.join(room_id);
+  });
 
-  socket.on("message", (data) => {
-    console.log(data);
+  socket.on("message", async (data) => {
+    const createdMessage = await createMessage(data);
+
+    // Send to a specific room
+    io.to(data.room).emit("message", createdMessage);
   });
 
   socket.on("disconnect", () => {

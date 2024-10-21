@@ -8,6 +8,7 @@ import {
 import { io, Socket } from "socket.io-client";
 import { ORIGIN } from "../utils/constants";
 import { MessageType } from "../utils/@types";
+import useChatStore from "../stores/ChatStore";
 
 export interface SocketContextType {
   socket: Socket | undefined;
@@ -21,6 +22,7 @@ const useSocketContext = (): SocketContextType | null => {
 
 const SocketContextProvider = ({ children }: PropsWithChildren) => {
   const [socket, setSocket] = useState<SocketContextType["socket"]>();
+  const addMessage = useChatStore((state) => state.addMessage);
 
   useEffect(() => {
     const socket = io(ORIGIN, {
@@ -30,8 +32,7 @@ const SocketContextProvider = ({ children }: PropsWithChildren) => {
 
     socket.on("message", (data: MessageType) => {
       // Save the current message in state
-      
-
+      addMessage(data);
     });
     setSocket(socket);
   }, []);

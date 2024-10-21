@@ -85,7 +85,13 @@ export const getRoom = async (req, res) => {
 
     const foundRoom = await Room.findById(id)
       .populate("participants", "name email picture")
-      .populate("messages")
+      .populate({
+        path: "messages",
+        populate: {
+          path: "sendee",
+          select: "_id name",
+        },
+      })
       .populate("initiated_by");
 
     if (!foundRoom) return res.sendStatus(404);

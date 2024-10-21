@@ -22,6 +22,8 @@ const MessageForm = () => {
       sendee: auth?._id,
     };
 
+    setFocus(false);
+
     if (socket?.connected) {
       socket?.emit("message", message);
     } else {

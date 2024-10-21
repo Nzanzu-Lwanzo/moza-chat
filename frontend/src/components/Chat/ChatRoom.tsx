@@ -18,6 +18,7 @@ import { useJoinRoom } from "../../hooks/useUsers";
 import useAppStore from "../../stores/AppStore";
 import Loader from "../CrossApp/Loader";
 import MessageForm from "../Form/MessageForm";
+import { convert } from "html-to-text";
 
 const MAP_PANELS: Partial<Record<PanelType, React.ReactElement>> = {
   MESSAGES: <MessagesList />,
@@ -92,8 +93,9 @@ const ChatRoom = () => {
           <Avatar size={150} name={currentRoom?.name} />
           <h2> {currentRoom?.name} </h2>
           <p>
-            {currentRoom?.description ||
-              "L'auteur de cette Chat Room n'a fourni aucune description."}
+            {currentRoom?.description
+              ? convert(currentRoom.description)
+              : "L'auteur de cette Chat Room n'a fourni aucune description."}
           </p>
           <button
             type="button"

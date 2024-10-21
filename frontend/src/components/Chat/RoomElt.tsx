@@ -4,11 +4,13 @@ import Avatar from "boring-avatars";
 import { useGetRoom } from "../../hooks/useRooms";
 import useChatStore from "../../stores/ChatStore";
 import { lsWrite } from "../../utils/ls.io";
+import { useSocketContext } from "../../contexts/socketContext";
 
 const RoomElt = ({ room }: PropsWithChildren<{ room: RoomType }>) => {
   const { currentRoom, setCurrentRoom, setChatRoomVisibilityOnMobile } =
     useChatStore();
   let isActive = (id: string) => currentRoom?._id === id;
+  const { socket } = useSocketContext()!;
 
   const { request } = useGetRoom();
 
@@ -19,6 +21,7 @@ const RoomElt = ({ room }: PropsWithChildren<{ room: RoomType }>) => {
         onClick={() => {
           setCurrentRoom(room);
           setChatRoomVisibilityOnMobile(true);
+          socket?.emit("join_room", room._id); // Join this room when you select it
           lsWrite("current-room", room);
           request(room._id);
         }}

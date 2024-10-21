@@ -114,7 +114,8 @@ export const useCreateRoom = () => {
 };
 
 export const useGetRoom = () => {
-  const { setCurrentRoom } = useChatStore();
+  const { setCurrentRoom, setMessages } = useChatStore();
+  const [is_updating_messages_state, startTransition] = useTransition();
 
   const [status, setStatus] = useState<
     "pending" | "error" | "success" | "stable"
@@ -140,6 +141,8 @@ export const useGetRoom = () => {
           setCurrentRoom(data);
           setStatus("success");
 
+          startTransition(() => setMessages(data.messages || []));
+
           return data;
         })
         .catch((e) => {
@@ -162,6 +165,7 @@ export const useGetRoom = () => {
         });
     },
     status,
+    is_updating_messages_state,
   };
 };
 
@@ -269,7 +273,7 @@ export const useDeleteRoom = ({
           withCredentials: true,
         });
 
-        if(response.status < 400) {
+        if (response.status < 400) {
           enqueueSnackbar("Chat Room supprimée avec succès !");
         }
 
@@ -292,7 +296,6 @@ export const useDeleteRoom = ({
         });
 
         // Delete the messages of this room from indexedDB
-  
 
         return response.data;
       } catch (e) {

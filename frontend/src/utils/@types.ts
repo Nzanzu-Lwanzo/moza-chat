@@ -12,6 +12,7 @@ export interface RoomType {
   description: string;
   picture?: string;
   participants?: (string | UserType | undefined)[];
+  messages: MessageType[];
   restricted: boolean;
   private: boolean;
   likes: number;

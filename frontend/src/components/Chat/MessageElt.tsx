@@ -4,7 +4,8 @@ import { PaperPlane, PencilCircle, Trash } from "@phosphor-icons/react";
 import { COLOR_SCHEMA } from "../../utils/constants";
 import { PropsWithChildren, useState } from "react";
 import { MessageType } from "../../utils/@types";
-
+import { useDeleleMessage } from "../../hooks/useMessages";
+import Loader from "../CrossApp/Loader";
 
 interface Props {
   message?: MessageType;
@@ -13,6 +14,7 @@ interface Props {
 
 const MessageElt = ({ message, who }: PropsWithChildren<Props>) => {
   const [isEditing, setIsEditing] = useState(false);
+  const { isDeleting, isPending, mutate } = useDeleleMessage();
 
   return (
     <li className={who}>
@@ -23,33 +25,42 @@ const MessageElt = ({ message, who }: PropsWithChildren<Props>) => {
           <span className={`online__status online`}></span>
         </div>
 
-        <button
-          type="button"
-          className="action__on__message"
-        >
-          <Trash size={18} fill={COLOR_SCHEMA.whity} />
-        </button>
+        {who === "me" && (
+          <>
+            <button
+              type="button"
+              className="action__on__message"
+              onClick={() => mutate(message?._id)}
+            >
+              {isDeleting || isPending ? (
+                <Loader height={15} width={15} />
+              ) : (
+                <Trash size={18} fill={COLOR_SCHEMA.whity} />
+              )}
+            </button>
 
-        {isEditing ? (
-          <button
-            type="button"
-            className="action__on__message"
-            onClick={() => {
-              setIsEditing(false);
-            }}
-          >
-            <PaperPlane size={18} fill={COLOR_SCHEMA.whity} />
-          </button>
-        ) : (
-          <button
-            type="button"
-            className="action__on__message"
-            onClick={() => {
-              setIsEditing(true);
-            }}
-          >
-            <PencilCircle size={18} fill={COLOR_SCHEMA.whity} />
-          </button>
+            {isEditing ? (
+              <button
+                type="button"
+                className="action__on__message"
+                onClick={() => {
+                  setIsEditing(false);
+                }}
+              >
+                <PaperPlane size={18} fill={COLOR_SCHEMA.whity} />
+              </button>
+            ) : (
+              <button
+                type="button"
+                className="action__on__message"
+                onClick={() => {
+                  setIsEditing(true);
+                }}
+              >
+                <PencilCircle size={18} fill={COLOR_SCHEMA.whity} />
+              </button>
+            )}
+          </>
         )}
       </div>
       <div className="message__card">
@@ -61,7 +72,7 @@ const MessageElt = ({ message, who }: PropsWithChildren<Props>) => {
             defaultValue={message?.content}
           ></textarea>
         ) : (
-          "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Id illum dicta perspiciatis repudiandae! Corrupti a dolorem repellendus nihil cum! Odio, at tenetur qui temporibus voluptas laudantium libero incidunt sint rem."
+          message?.content
         )}
       </div>
       <div className="tags">
