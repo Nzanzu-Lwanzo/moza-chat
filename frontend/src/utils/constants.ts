@@ -1,4 +1,11 @@
-let RUNENV: "dev" | "prod" = "dev";
+import { Record } from "@phosphor-icons/react";
+
+let RUNENV: "dev" | "prod" = "prod";
+
+const MAP_ENV_TO_ORIGIN: Record<"dev" | "prod", string> = {
+  dev: "http://localhost:5000",
+  prod: document.location.origin,
+};
 
 const COLOR_SCHEMA = {
   dark: "#1B1A1F",
@@ -7,8 +14,7 @@ const COLOR_SCHEMA = {
   secondDark: "#524c42",
 };
 
-const ORIGIN =
-  RUNENV === "dev" ? "http://localhost:5000" : document.location.origin;
+const ORIGIN = MAP_ENV_TO_ORIGIN[RUNENV];
 
 const BASE_URL = ORIGIN.concat("/api");
 
