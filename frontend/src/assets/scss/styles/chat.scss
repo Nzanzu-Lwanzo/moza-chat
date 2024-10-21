@@ -178,7 +178,6 @@ $top__and__actions: 62px;
               @include clamp;
             }
 
-
             &.active {
               background-color: $second__dark;
             }
@@ -770,9 +769,16 @@ $top__and__actions: 62px;
     }
   }
 
+  // body,
+  // #root,
+  // #app__page__structure {
+  //   min-height: 100vh;
+  //   width: 100%;
+  // }
+
   .chat__card {
     width: 100vw;
-    height: 100vh;
+    height: 100%;
     border-radius: 0;
     display: block;
 
@@ -799,6 +805,6 @@ $top__and__actions: 62px;
 
   .chat__room .messages ul li {
     width: 80%;
-    font-size: .8rem;
+    font-size: 0.8rem;
   }
 }

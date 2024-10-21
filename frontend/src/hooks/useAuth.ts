@@ -54,6 +54,7 @@ export const useAuthenticate = () => {
           }
         } else {
           snackMessage = "Il se peut que ces données soient incorrectes !";
+          alert(error.message);
         }
 
         enqueueSnackbar(snackMessage);
