@@ -24,7 +24,12 @@ const PORT = process.env.PORT || 5000;
 const MONGODB_URI = process.env.MONGODB_URI;
 const RUNENV = process.env.RUNENV || "dev";
 const SECRET = process.env.SECRET;
-const WHITELIST_ORIGINS = ["http://localhost:5000", "http://localhost:5173"];
+const WHITELIST_ORIGINS = [
+  "http://localhost:5000",
+  "http://localhost:5173",
+  "https://mozachat.netlify.com",
+  "https://mozachat.onrender.com",
+];
 let cookiesMaxAge = 60 * 60 * 24 * 30 * 1500;
 let storeSessionExpiryDate = 60 * 60 * 24 * 30 * 1500;
 let refreshStoredSessionInterval = 24 * 3600;
