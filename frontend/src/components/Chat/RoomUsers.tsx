@@ -46,15 +46,11 @@ const RoomUsers = () => {
         {currentRoom?.participants?.map((participant) => {
           let user = participant as UserType;
 
-          console.log(user._id === currentRoom.initiated_by?._id);
-
           return (
             <li key={`${user._id}${user.name}`}>
               <div className="user">
                 <Avatar size={25} name={user.name} />
-                <span>
-                  {user.name} [ {user.email} ]
-                </span>
+                <span>{user.name}</span>
                 {user._id === currentRoom.initiated_by?._id && (
                   <span className="cell">Administrateur</span>
                 )}

@@ -9,7 +9,7 @@ import useChatStore from "../stores/ChatStore";
 import { SocketContextProvider } from "../contexts/socketContext";
 
 const Chat = () => {
-  const { currentRoom } = useChatStore();
+  const { currentRoom, chatRoomVisibleOnMobile } = useChatStore();
 
   return (
     <SocketContextProvider>
@@ -21,7 +21,11 @@ const Chat = () => {
             <BottomActions />
           </div>
 
-          <div className="part dark__theme">
+          <div
+            className={`part dark__theme ${
+              chatRoomVisibleOnMobile ? "show__on__mobile" : ""
+            }`}
+          >
             {!currentRoom ? <NoChatSelected></NoChatSelected> : <ChatRoom />}
           </div>
         </div>

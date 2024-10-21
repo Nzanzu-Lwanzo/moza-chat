@@ -23,12 +23,12 @@ const ServerDown = ({
       <path
         d="M140.09162,291.85056c0-78.36865,54.255-141.78356,121.30372-141.78356"
         transform="translate(-31.39089 -100.5)"
-        fill="#f97300"
+        fill="#f97300 "
       />
       <path
         d="M70.77521,158.66768c0,73.61476,31.00285,133.18288,69.31641,133.18288"
         transform="translate(-31.39089 -100.5)"
-        fill="#f97300"
+        fill="#f97300 "
       />
       <path
         d="M140.09162,291.85056c0-100.13772,62.7103-181.16788,140.20819-181.16788"
@@ -151,7 +151,7 @@ const ServerDown = ({
         y="150"
         width="16"
         height="16"
-        fill="#f97300"
+        fill="#f97300 "
         opacity="0.4"
       />
       <rect
@@ -159,16 +159,16 @@ const ServerDown = ({
         y="150"
         width="16"
         height="16"
-        fill="#f97300"
+        fill="#f97300 "
         opacity="0.8"
       />
-      <rect x="317.60911" y="150" width="16" height="16" fill="#f97300" />
+      <rect x="317.60911" y="150" width="16" height="16" fill="#f97300 " />
       <rect
         x="271.60911"
         y="251"
         width="16"
         height="16"
-        fill="#f97300"
+        fill="#f97300 "
         opacity="0.4"
       />
       <rect
@@ -176,16 +176,16 @@ const ServerDown = ({
         y="251"
         width="16"
         height="16"
-        fill="#f97300"
+        fill="#f97300 "
         opacity="0.8"
       />
-      <rect x="317.60911" y="251" width="16" height="16" fill="#f97300" />
+      <rect x="317.60911" y="251" width="16" height="16" fill="#f97300 " />
       <rect
         x="271.60911"
         y="352"
         width="16"
         height="16"
-        fill="#f97300"
+        fill="#f97300 "
         opacity="0.4"
       />
       <rect
@@ -193,10 +193,10 @@ const ServerDown = ({
         y="352"
         width="16"
         height="16"
-        fill="#f97300"
+        fill="#f97300 "
         opacity="0.8"
       />
-      <rect x="317.60911" y="352" width="16" height="16" fill="#f97300" />
+      <rect x="317.60911" y="352" width="16" height="16" fill="#f97300 " />
       <circle cx="316.60911" cy="538" r="79" fill="#2f2e41" />
       <rect x="280.60911" y="600" width="24" height="43" fill="#2f2e41" />
       <rect x="328.60911" y="600" width="24" height="43" fill="#2f2e41" />
@@ -207,7 +207,7 @@ const ServerDown = ({
       <path
         d="M271.36733,565.03228c-6.37889-28.56758,14.01185-57.43392,45.544-64.47477s62.2651,10.41,68.644,38.9776-14.51861,39.10379-46.05075,46.14464S277.74622,593.59986,271.36733,565.03228Z"
         transform="translate(-31.39089 -100.5)"
-        fill="#f97300"
+        fill="#f97300 "
       />
       <ellipse
         cx="417.21511"

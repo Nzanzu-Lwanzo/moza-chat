@@ -260,6 +260,7 @@ html:has(.modal__panel) {
       border: 1px solid $dark;
       border-radius: 3px;
       resize: none;
+      font-size: .75rem;
     }
 
     textarea {

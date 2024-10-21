@@ -7,6 +7,7 @@ import {
 } from "react";
 import { io, Socket } from "socket.io-client";
 import { ORIGIN } from "../utils/constants";
+import { MessageType } from "../utils/@types";
 
 export interface SocketContextType {
   socket: Socket | undefined;
@@ -27,6 +28,11 @@ const SocketContextProvider = ({ children }: PropsWithChildren) => {
       autoConnect: true,
     });
 
+    socket.on("message", (data: MessageType) => {
+      // Save the current message in state
+      
+
+    });
     setSocket(socket);
   }, []);
 

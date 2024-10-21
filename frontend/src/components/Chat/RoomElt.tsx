@@ -6,7 +6,8 @@ import useChatStore from "../../stores/ChatStore";
 import { lsWrite } from "../../utils/ls.io";
 
 const RoomElt = ({ room }: PropsWithChildren<{ room: RoomType }>) => {
-  const { currentRoom, setCurrentRoom } = useChatStore();
+  const { currentRoom, setCurrentRoom, setChatRoomVisibilityOnMobile } =
+    useChatStore();
   let isActive = (id: string) => currentRoom?._id === id;
 
   const { request } = useGetRoom();
@@ -17,6 +18,7 @@ const RoomElt = ({ room }: PropsWithChildren<{ room: RoomType }>) => {
         className={isActive(room._id) ? "active" : undefined}
         onClick={() => {
           setCurrentRoom(room);
+          setChatRoomVisibilityOnMobile(true);
           lsWrite("current-room", room);
           request(room._id);
         }}

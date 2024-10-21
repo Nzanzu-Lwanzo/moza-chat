@@ -1,37 +1,41 @@
-
-
 @mixin center {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
-@mixin transp ($color:$accent) {
-    background-color: rgba($color: $color, $alpha: .1);
-    color: $color;
+@mixin transp($color: $accent) {
+  background-color: rgba($color: $color, $alpha: 0.1);
+  color: $color;
+
+  svg {
+    stroke: $color;
+  }
+}
+
+@mixin circle__btn($dims: 30px, $bg: transparent) {
+  height: $dims;
+  width: $dims;
+  background-color: $bg;
+  @include center;
+  border-radius: 50%;
+  transition: 0.2s ease-out;
+  text-decoration: none;
+  color: inherit;
+
+  &:hover {
+    background-color: $accent;
 
     svg {
-        stroke: $color;
+      stroke: #fff;
     }
+  }
 }
 
-@mixin circle__btn($dims:30px,$bg:transparent) {
-
-    height: $dims;
-    width: $dims;
-    background-color: $bg;
-    @include center;
-    border-radius: 50%;
-    transition: .2s ease-out;
-    text-decoration: none;
-    color: inherit;
-
-    &:hover {
-        background-color: $accent;
-
-        svg {
-            stroke: #FFF;
-        }
-    }
+@mixin clamp($lines:1) {
+  display: -webkit-box;
+  -webkit-line-clamp: $lines;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }

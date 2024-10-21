@@ -25,11 +25,16 @@ const MAP_PANELS: Partial<Record<PanelType, React.ReactElement>> = {
 };
 
 const ChatRoom = () => {
-  const { currentRoom, currentMainPanel, setCurrentMainPanel } = useChatStore();
+  const {
+    currentRoom,
+    currentMainPanel,
+    setCurrentMainPanel,
+    setChatRoomVisibilityOnMobile,
+    setCurrentRoom,
+  } = useChatStore();
   const [showMenu, setShowMenu] = useState(false);
   const isUserInCurrentRoom = useIsUserInCurrentRoom();
   const auth = useAppStore((state) => state.auth);
-
   const { isPending: isJoining, mutate: join } = useJoinRoom();
 
   return (
@@ -37,12 +42,18 @@ const ChatRoom = () => {
       {currentMainPanel === "MESSAGES" && (
         <div className="top__bar">
           <div className="room__infos">
-            <button className="back">
+            <button
+              className="back"
+              onClick={() => {
+                setCurrentRoom(undefined);
+                setChatRoomVisibilityOnMobile(false);
+              }}
+            >
               <ArrowLeft size={20} fill={COLOR_SCHEMA.whity} />
             </button>
             <div className="room">
               <Avatar size={25} name={currentRoom?.name} />
-              <span>{currentRoom?.name}</span>
+              <span className="room__name">{currentRoom?.name}</span>
             </div>
           </div>
           <div className="actions">

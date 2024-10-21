@@ -98,7 +98,7 @@ const AllUsers = () => {
                       <div className="user">
                         <Avatar size={25} name={user.name} />
                         <span>
-                          {user.name} [ {user.email} ]
+                          {user.name}
                         </span>
                       </div>
                       <div className="actions">

@@ -46,6 +46,27 @@ $top__and__actions: 62px;
         top: 0;
         position: sticky;
         background-color: $dark;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 0.5rem;
+        position: relative;
+
+        .icon__btn {
+          background-color: transparent;
+          cursor: pointer;
+        }
+
+        .menu {
+          position: absolute;
+          top: $top__bar__height;
+          right: 0;
+          height: 100px;
+          width: 200px;
+          background-color: rgba($color: #000000, $alpha: 0.9);
+          z-index: 3;
+          border-radius: 2px;
+        }
 
         .filter__box {
           display: flex;
@@ -58,6 +79,7 @@ $top__and__actions: 62px;
           border: 1px solid $second__dark;
           color: #fff;
           transition: 0.2s ease-out;
+          width: 100%;
 
           ::placeholder {
             color: $second__dark;
@@ -198,6 +220,10 @@ $top__and__actions: 62px;
         color: #fff;
       }
 
+      .room__name {
+        @include clamp;
+      }
+
       .no__chat__selected,
       .no__message {
         @include center;
@@ -260,6 +286,7 @@ $top__and__actions: 62px;
 
       .back {
         cursor: pointer;
+        display: none;
       }
     }
 
@@ -295,7 +322,7 @@ $top__and__actions: 62px;
         top: 2.2rem;
         right: 1.1rem;
         width: 180px;
-        background-color: rgba($color: #000000, $alpha: 0.5);
+        background-color: #000;
         @extend .box__shadow;
         border-radius: 3px;
         border-top-right-radius: 3px;
@@ -474,7 +501,7 @@ $top__and__actions: 62px;
         width: 100%;
         font-size: $fontSize;
         resize: none;
-        padding-top: 0.8rem;
+        padding: 1rem;
       }
 
       ::placeholder {
@@ -671,6 +698,7 @@ $top__and__actions: 62px;
           background-color: $second__dark;
           border-radius: 4px;
           margin-bottom: 1rem;
+          gap: 1rem;
           button {
             background-color: transparent;
             cursor: pointer;
@@ -703,5 +731,66 @@ $top__and__actions: 62px;
         }
       }
     }
+  }
+}
+
+// MEDIA QUERIES
+@media only all and (max-width: 1300px) {
+  .chat__card {
+    width: 85vw;
+  }
+}
+
+@media only all and (max-width: 1060px) {
+  .chat__card {
+    width: 95vw;
+    height: 95vh;
+  }
+}
+
+@media only all and (max-width: 768px) {
+  .chat__room .top__bar .room__infos .back,
+  .chat__room .top__bar .room .back {
+    display: flex;
+  }
+
+  .chat__room .top__bar {
+    gap: 0.8rem;
+    border-bottom: 1px solid $second__dark;
+    .actions {
+      gap: 0.4rem;
+    }
+  }
+
+  .chat__card {
+    width: 100vw;
+    height: 100vh;
+    border-radius: 0;
+    display: block;
+
+    .part {
+      &:last-of-type {
+        position: fixed;
+        inset: 0;
+        height: 100vh;
+        width: 100vw;
+        display: none;
+
+        &.show__on__mobile {
+          display: initial;
+        }
+      }
+    }
+  }
+}
+
+@media only all and (max-width: 600px) {
+  .chat__room .messages {
+    padding-inline: 1rem;
+  }
+
+  .chat__room .messages ul li {
+    width: 80%;
+    font-size: .8rem;
   }
 }

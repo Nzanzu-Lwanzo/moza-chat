@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 
 const BottomActions = memo(() => {
   const { isLogginOut, logout } = useAuthenticate();
-  const { auth, setModal } = useAppStore();
+  const { auth } = useAppStore();
 
   return (
     <>
@@ -26,13 +26,6 @@ const BottomActions = memo(() => {
         <Link to="/#about" type="button" className="action">
           <Info size={20} />
         </Link>
-        <button
-          type="button"
-          className="new__room__btn"
-          onClick={() => setModal("ROOM_FORM")}
-        >
-          Créez une chat room
-        </button>
         <span className="username">{formatUserName(auth?.name)}</span>
       </div>
     </>

@@ -61,7 +61,7 @@ const MessageElt = ({ message, who }: PropsWithChildren<Props>) => {
             defaultValue={message?.content}
           ></textarea>
         ) : (
-          message?.content
+          "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Id illum dicta perspiciatis repudiandae! Corrupti a dolorem repellendus nihil cum! Odio, at tenetur qui temporibus voluptas laudantium libero incidunt sint rem."
         )}
       </div>
       <div className="tags">

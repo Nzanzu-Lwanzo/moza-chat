@@ -1,12 +1,14 @@
-import { MagnifyingGlass } from "@phosphor-icons/react";
+import { MagnifyingGlass, PlusCircle } from "@phosphor-icons/react";
 import useSearchAndFilterStore from "../../stores/SearchAndFilterStore";
 import useSearchAndFilter from "../../hooks/useSearchAndFilter";
 import Loader from "../CrossApp/Loader";
 import { COLOR_SCHEMA } from "../../utils/constants";
+import useAppStore from "../../stores/AppStore";
 
 const SearchAndFilter = () => {
   const { filterSection, switchFilterSection } = useSearchAndFilterStore();
   const { search, filter, pending } = useSearchAndFilter();
+  const setModal = useAppStore((state) => state.setModal);
 
   return (
     <>
@@ -32,6 +34,16 @@ const SearchAndFilter = () => {
             onChange={search}
           />
         </div>
+        <button
+          type="button"
+          className="icon__btn"
+          onClick={() => setModal("ROOM_FORM")}
+        >
+          <PlusCircle size={20} fill={COLOR_SCHEMA.accent} />
+        </button>
+        {/* <div className="menu">
+
+        </div> */}
       </div>
       <div className="filter__tags">
         <button

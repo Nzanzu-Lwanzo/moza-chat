@@ -5,6 +5,7 @@ import { useCallback, useState } from "react";
 import { XCircle } from "@phosphor-icons/react";
 import { useSocketContext } from "../../contexts/socketContext";
 import useChatStore from "../../stores/ChatStore";
+import { enqueueSnackbar } from "notistack";
 
 const MessageForm = () => {
   const auth = useAppStore((state) => state.auth);
@@ -21,8 +22,12 @@ const MessageForm = () => {
       sendee: auth?._id,
     };
 
-    socket?.emit("message", message);
-  }, []);
+    if (socket?.connected) {
+      socket?.emit("message", message);
+    } else {
+      enqueueSnackbar("Vous êtes hors ligne !");
+    }
+  }, [messageText]);
 
   return (
     <div className={`messagery__form ${focus ? "input__has__focus" : ""}`}>

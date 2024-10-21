@@ -7,6 +7,7 @@ interface State {
   currentRoom?: RoomType | undefined;
   currentMainPanel: "MESSAGES" | "GROUP_INFOS";
   allUsers: UserType[] | null;
+  chatRoomVisibleOnMobile: boolean;
 }
 
 interface Actions {
@@ -18,6 +19,7 @@ interface Actions {
   deleteRoomFromState(id: string): void;
   setCurrentMainPanel(panel: State["currentMainPanel"]): void;
   setAllUsers(users: State["allUsers"]): void;
+  setChatRoomVisibilityOnMobile(visible: boolean): void;
 }
 
 const useChatStore = create<State & Actions>()((set) => ({
@@ -26,6 +28,7 @@ const useChatStore = create<State & Actions>()((set) => ({
   messages: [],
   currentMainPanel: "MESSAGES",
   allUsers: [],
+  chatRoomVisibleOnMobile: false,
   setRooms(rooms) {
     set((state) => {
       return { ...state, rooms: rooms ? [...rooms, ...state.rooms] : [] };
@@ -53,6 +56,9 @@ const useChatStore = create<State & Actions>()((set) => ({
     set((state) => {
       return { ...state, rooms: state.rooms.filter((room) => room._id !== id) };
     });
+  },
+  setChatRoomVisibilityOnMobile(visible) {
+    set((state) => ({ ...state, chatRoomVisibleOnMobile: visible }));
   },
 }));
 
