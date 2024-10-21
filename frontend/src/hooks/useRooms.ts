@@ -13,7 +13,7 @@ export const useGetRooms = () => {
   const { auth } = useAppStore();
   const { setRooms } = useChatStore();
 
-  const navigateTo = useNavigate();
+  // const navigateTo = useNavigate();
 
   const { data, isFetching, isError, isSuccess } = useQuery({
     queryKey: ["rooms"],
@@ -118,7 +118,7 @@ export const useCreateRoom = () => {
 };
 
 export const useGetRoom = () => {
-  const { setCurrentRoom, setMessages } = useChatStore();
+  const { setCurrentRoom, setMessages, deleteRoomFromState } = useChatStore();
   const [is_updating_messages_state, startTransition] = useTransition();
 
   const [status, setStatus] = useState<
@@ -155,6 +155,8 @@ export const useGetRoom = () => {
 
           if (response?.status === 404) {
             enqueueSnackbar("Chat Room non trouvée sur le serveur !");
+
+            deleteRoomFromState(id);
 
             idbConnection.remove({
               from: "rooms",
