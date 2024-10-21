@@ -75,7 +75,7 @@ function App() {
             <Router>
               <Routes>
                 <Route path="/" Component={Home} />
-                <Route path="/chat" element={<Chat />} />
+                <Route path="/chat" Component={Chat} />
                 <Route path="/client/auth/">
                   <Route path="login" Component={LogIn} />
                   <Route path="signup" Component={SignUp} />

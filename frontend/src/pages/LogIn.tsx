@@ -23,7 +23,10 @@ const LogIn = () => {
             name="name"
             required
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              setUser((prev: LogInUserType) => ({ ...prev, name: e.target.value }))
+              setUser((prev: LogInUserType) => ({
+                ...prev,
+                name: e.target.value,
+              }))
             }
           />
         </div>

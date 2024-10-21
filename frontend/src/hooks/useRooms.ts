@@ -51,8 +51,7 @@ export const useGetRooms = () => {
       } catch (e) {
         let error = e as AxiosError;
         if (error.response?.status === 401) {
-          navigateTo("/client/auth/login");
-          enqueueSnackbar("Connectez-vous à votre compte !");
+          enqueueSnackbar("Vous n'êtes pas connecté(e) !");
           return;
         }
 
@@ -98,12 +97,17 @@ export const useCreateRoom = () => {
       } catch (e) {
         const errorResponse = (e as AxiosError).response;
 
-        if (errorResponse?.status === 401) {
-          navigateTo("/client/auth/login");
-          enqueueSnackbar("Connectez-vous pour créer une room !");
+        switch (errorResponse?.status) {
+          case 401:
+            navigateTo("/client/auth/login");
+            enqueueSnackbar("Connectez-vous pour créer une room !");
+            break;
+          case 400:
+            enqueueSnackbar("Erreur : Chat Room non créée !");
+            break;
+          default:
+            console.log(errorResponse);
         }
-
-        console.log(errorResponse);
 
         return e;
       }

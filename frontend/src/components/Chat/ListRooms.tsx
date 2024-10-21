@@ -36,7 +36,7 @@ const ListRooms = () => {
       ) : isFetching ? (
         <WholeElementLoader />
       ) : isError ? (
-        <Placeholder message="Oups ! Une erreur réseau est survenue !">
+        <Placeholder message="Oups ! Une erreur réseau est survenue ! Etes-vous sûr(e) d'être connecté(e) ?">
           <ServerDown />
         </Placeholder>
       ) : isSuccess && rooms.length !== 0 ? (

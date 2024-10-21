@@ -2,6 +2,7 @@ import Message from "../database/models/messages.mjs";
 import Room from "../database/models/rooms.mjs";
 import { filesEnum } from "../database/models/messages.mjs";
 import { Server } from "socket.io";
+import mongoose from "mongoose";
 
 /**
  *
@@ -41,8 +42,11 @@ export const deleteMessage = async (req, res) => {
 
 export const deleteAllUserMessagesFromRoom = async (req, res) => {
   try {
-    const deletedMessages = await Message.deleteMany({ sendee: req.user._id });
-
+    const deletedMessages = await Message.deleteMany(
+      { sendee: new mongoose.Types.ObjectId(req.user._id) },
+      {}
+    );
+    console.log(deletedMessages);
     res.sendStatus(204);
   } catch (e) {
     console.log(e);

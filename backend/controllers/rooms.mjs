@@ -1,3 +1,4 @@
+import Message from "../database/models/messages.mjs";
 import Room from "../database/models/rooms.mjs";
 import { validateArrayOfIds } from "../utils/validation/room.mjs";
 
@@ -75,6 +76,7 @@ export const initRoom = async (req, res) => {
       return res.status(406).json({ message: "DUPLICATE_ROOM_NAME" });
     }
 
+    console.log(e);
     return res.sendStatus(400);
   }
 };
@@ -108,6 +110,7 @@ export const deleteRoom = async (req, res) => {
 
   try {
     const deletedRoom = await Room.findByIdAndDelete(id);
+    await Message.deleteMany({ room: id });
     res.status(200).json(deletedRoom);
   } catch (e) {
     console.log(e);

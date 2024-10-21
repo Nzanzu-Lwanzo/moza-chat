@@ -59,7 +59,7 @@ const SignUp = () => {
           type="button"
           className="submit__button"
           onClick={() => {
-            if (!user?.email || !user?.password || !user?.name)
+            if (!user?.password || !user?.name)
               return enqueueSnackbar("Données invalides ou incomplètes !");
 
             signup(user);

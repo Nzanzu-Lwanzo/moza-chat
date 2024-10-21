@@ -31,14 +31,6 @@ const MessageSchema = new mongoose.Schema(
   }
 );
 
-MessageSchema.post("deleteMany", function (message, next) {
-  console.log(message);
-});
-
-MessageSchema.post("deleteOne", function (message, next) {
-  console.log(message);
-});
-
 const Message = mongoose.model("Message", MessageSchema);
 
 export default Message;

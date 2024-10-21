@@ -164,6 +164,7 @@ main {
   height: 100%;
   @include center;
   padding: inherit;
+  text-align: center;
 
   .message {
     font-size: 0.7rem;

@@ -564,14 +564,15 @@ $top__and__actions: 62px;
   .join__panel {
     height: 100%;
     width: 100%;
-    background-color: rgba($color: #000000, $alpha: 0.5);
+    background-color: rgba($color: #000000, $alpha: 0.4);
     position: absolute;
     inset: 0;
-    backdrop-filter: blur(2px);
+    backdrop-filter: blur(6px);
     @include center;
     gap: 1rem;
     padding: 1.5rem;
     text-align: center;
+    z-index: 3;
 
     h2 {
       font-weight: bold;

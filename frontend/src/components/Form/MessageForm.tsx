@@ -26,6 +26,7 @@ const MessageForm = () => {
 
     if (socket?.connected) {
       socket?.emit("message", message);
+      setMessageText("");
     } else {
       enqueueSnackbar("Vous êtes hors ligne !");
     }
@@ -40,6 +41,7 @@ const MessageForm = () => {
           placeholder={`Vous écrivez en tant que ${auth?.name}`}
           onFocus={() => setFocus(true)}
           onChange={(e) => setMessageText(e.target.value)}
+          value={messageText}
         ></textarea>
         <button type="button" className="btn" onClick={handleSendMessage}>
           <PaperPlane fill={COLOR_SCHEMA.secondDark} size={25} />

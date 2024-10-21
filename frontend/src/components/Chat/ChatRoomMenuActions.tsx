@@ -18,8 +18,8 @@ const ChatRoomMenuActions = () => {
   const { mutate: quitRoom, isPending: isQuittingRoom } = useQuitRoom();
 
   const {
-    isDeleting: isDeletingMessages,
-    isPending,
+    isDeleting: isUpdatingStateAfterDeletingAllMessages,
+    isPending: isDeletingAllMessages,
     mutate,
   } = useDeleteMessages();
 
@@ -43,7 +43,7 @@ const ChatRoomMenuActions = () => {
         className=""
         onClick={() => mutate(currentRoom?._id)}
       >
-        {isDeletingMessages || isPending ? (
+        {isUpdatingStateAfterDeletingAllMessages || isDeletingAllMessages ? (
           <Loader height={15} width={15}></Loader>
         ) : (
           "Supprimer mes messages"
