@@ -61,6 +61,8 @@ App.use((req, res, next) => {
   next();
 });
 
+App.set("trust proxy", 1);
+
 App.use(cors(corsOptions));
 App.use(cookieParser());
 App.use(
@@ -72,6 +74,7 @@ App.use(
       maxAge: cookiesMaxAge, // 30 days
       httpOnly: RUNENV !== "dev",
       secure: RUNENV !== "dev",
+      sameSite: "none",
     },
     store: MongoStore.create({
       mongoUrl: MONGODB_URI,
