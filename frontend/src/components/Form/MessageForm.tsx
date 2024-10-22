@@ -16,6 +16,10 @@ const MessageForm = () => {
   const { socket } = useSocketContext()!;
 
   const handleSendMessage = useCallback(() => {
+    if (messageText.length == 0) {
+      return;
+    }
+
     const message = {
       content: messageText,
       room: currentRoom?._id,

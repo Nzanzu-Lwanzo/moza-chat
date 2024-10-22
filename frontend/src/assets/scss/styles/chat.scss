@@ -754,9 +754,11 @@ $top__and__actions: 62px;
 }
 
 @media only all and (max-width: 768px) {
-  .chat__room .top__bar .room__infos .back,
-  .chat__room .top__bar .room .back {
-    display: flex;
+  .chat__room {
+    .top__bar .room__infos .back,
+    .top__bar .room .back {
+      display: flex;
+    }
   }
 
   .chat__room .top__bar {
@@ -767,13 +769,6 @@ $top__and__actions: 62px;
     }
   }
 
-  // body,
-  // #root,
-  // #app__page__structure {
-  //   min-height: 100vh;
-  //   width: 100%;
-  // }
-
   .chat__card {
     height: 90vh;
     border-radius: 0;
@@ -782,9 +777,9 @@ $top__and__actions: 62px;
     .part {
       &:last-of-type {
         position: fixed;
-        inset: 0;
-        height: 100vh;
-        width: 100vw;
+        // inset: 0;
+        height: 90vh; // Match the height of chat__card
+        width: 95vw;  // Match the width of chat__card
         display: none;
 
         &.show__on__mobile {
