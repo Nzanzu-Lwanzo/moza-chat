@@ -770,17 +770,24 @@ $top__and__actions: 62px;
   }
 
   .chat__card {
-    height: 90vh;
+    height: 80vh;
     border-radius: 0;
     grid-template-columns: auto;
+    position: relative;
+    border-radius: 3px;
+    overflow: hidden;
+
+    /*
+      height and width should be 100vh and 100vw for mobile.
+    */
 
     .part {
       &:last-of-type {
-        position: fixed;
-        // inset: 0;
-        height: 90vh; // Match the height of chat__card
-        width: 95vw;  // Match the width of chat__card
+        position: absolute;
+        height: 100%; // Match the height of chat__card
+        width: 100%; // Match the width of chat__card
         display: none;
+        inset: 0;
 
         &.show__on__mobile {
           display: initial;
