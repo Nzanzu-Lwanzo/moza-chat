@@ -13,7 +13,7 @@ export const useGetRooms = () => {
   const { auth } = useAppStore();
   const { setRooms } = useChatStore();
 
-  // const navigateTo = useNavigate();
+  const navigateTo = useNavigate();
 
   const { data, isFetching, isError, isSuccess } = useQuery({
     queryKey: ["rooms"],
@@ -51,7 +51,8 @@ export const useGetRooms = () => {
       } catch (e) {
         let error = e as AxiosError;
         if (error.response?.status === 401) {
-          enqueueSnackbar("Vous n'êtes pas connecté(e) !");
+          enqueueSnackbar("Connectez vous à votre compte !");
+          navigateTo("/client/auth/login");
           return;
         }
 

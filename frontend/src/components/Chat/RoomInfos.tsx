@@ -25,7 +25,7 @@ interface Actions {
 }
 
 const reducer = (state: ActionType, action: Actions) => {
-  console.log(state);
+  state.at(0);
   switch (action.section) {
     case "all_users":
       return "all_users";

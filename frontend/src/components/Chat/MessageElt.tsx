@@ -6,6 +6,8 @@ import { PropsWithChildren, useState } from "react";
 import { MessageType } from "../../utils/@types";
 import { useDeleleMessage } from "../../hooks/useMessages";
 import Loader from "../CrossApp/Loader";
+import useChatStore from "../../stores/ChatStore";
+import useAppStore from "../../stores/AppStore";
 
 interface Props {
   message?: MessageType;
@@ -15,17 +17,25 @@ interface Props {
 const MessageElt = ({ message, who }: PropsWithChildren<Props>) => {
   const [isEditing, setIsEditing] = useState(false);
   const { isDeleting, isPending, mutate } = useDeleleMessage();
+  const { connectedUsers, currentRoom } = useChatStore();
+  const auth = useAppStore((state) => state.auth);
 
   return (
-    <li className={who}>
+    <>
       <div className="menu__on__message">
         <div className="author">
           <Avatar size={30}></Avatar>
           <span>{formatUserName(message?.sendee.name)}</span>
-          <span className={`online__status online`}></span>
+          <span
+            className={`online__status ${
+              connectedUsers.includes(message?.sendee._id!)
+                ? "online"
+                : "offline"
+            }`}
+          ></span>
         </div>
 
-        {who === "me" && (
+        {(who === "me" || currentRoom?.initiated_by?._id == auth?._id) && (
           <>
             <button
               type="button"
@@ -38,7 +48,11 @@ const MessageElt = ({ message, who }: PropsWithChildren<Props>) => {
                 <Trash size={18} fill={COLOR_SCHEMA.whity} />
               )}
             </button>
+          </>
+        )}
 
+        {who === "me" && (
+          <>
             {isEditing ? (
               <button
                 type="button"
@@ -79,7 +93,7 @@ const MessageElt = ({ message, who }: PropsWithChildren<Props>) => {
         <span className="date__tag">{formatDate(message?.createdAt)}</span>
         <span className="tag">édité</span>
       </div>
-    </li>
+    </>
   );
 };
 

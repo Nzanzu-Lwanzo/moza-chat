@@ -8,6 +8,7 @@ interface State {
   currentMainPanel: "MESSAGES" | "GROUP_INFOS";
   allUsers: UserType[] | null;
   chatRoomVisibleOnMobile: boolean;
+  connectedUsers: string[];
 }
 
 interface Actions {
@@ -23,6 +24,7 @@ interface Actions {
   addMessage(message: MessageType): void;
   deleteMessage(id: string): void;
   deleteAuthMessages(id: string | undefined): void;
+  setConnectedUsers(users: string[]): void;
 }
 
 const useChatStore = create<State & Actions>()((set) => ({
@@ -32,6 +34,7 @@ const useChatStore = create<State & Actions>()((set) => ({
   currentMainPanel: "MESSAGES",
   allUsers: [],
   chatRoomVisibleOnMobile: false,
+  connectedUsers: [],
   setRooms(rooms) {
     set((state) => {
       return { ...state, rooms: rooms ? [...rooms, ...state.rooms] : [] };
@@ -81,6 +84,9 @@ const useChatStore = create<State & Actions>()((set) => ({
           })
         : state.messages,
     }));
+  },
+  setConnectedUsers(users) {
+    set((state) => ({ ...state, connectedUsers: users }));
   },
 }));
 

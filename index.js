@@ -92,8 +92,17 @@ App.use("/api/message", messageRouter);
 App.use("/api/room", roomRouter);
 App.get("*", (req, res) => res.sendFile("/index.html"));
 
-io.on("connection", (socket) => {
-  socket.on("join_room", (room_id) => {
+const CONNECTED_USERS_MAP = {};
+
+io.on("connection", async (socket) => {
+  let user_id = socket.handshake.auth.uid;
+  let socket_id = socket.id;
+
+  CONNECTED_USERS_MAP[user_id] = socket_id;
+
+  io.emit("connected_clients", Object.keys(CONNECTED_USERS_MAP));
+
+  socket.on("join_room", async (room_id) => {
     socket.join(room_id);
   });
 
@@ -105,16 +114,16 @@ io.on("connection", (socket) => {
   });
 
   socket.on("disconnect", () => {
-    console.log("User disconnected with id : ", socket.id);
+    delete CONNECTED_USERS_MAP[user_id];
+    io.emit("connected_clients", Object.keys(CONNECTED_USERS_MAP));
   });
 });
 
 server.listen(PORT, () => {
-  console.log("SERVER UP AND RUNNING");
   mongoose
     .connect(MONGODB_URI, {
       dbName: "moza_chat",
     })
-    .then(() => console.log("CONNECTED TO DABATASE"))
+    .then(() => {})
     .catch((e) => console.log(e.message.toUpperCase()));
 });

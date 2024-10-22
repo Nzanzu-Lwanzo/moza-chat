@@ -10,6 +10,16 @@ import { useCookies } from "react-cookie";
 import { useState } from "react";
 import useChatStore from "../stores/ChatStore";
 
+export const useHasCookie = () => {
+  const cookies: { "connect.sid"?: string } = useCookies(["connect.sid"])["0"];
+
+  let hasCookie: boolean = cookies["connect.sid"] !== undefined;
+
+  if (!hasCookie) localStorage.removeItem("auth-user");
+
+  return hasCookie;
+};
+
 export const useAuthenticate = () => {
   const { setAuth } = useAppStore();
   const navigateTo = useNavigate();
@@ -44,21 +54,45 @@ export const useAuthenticate = () => {
         let error = e as AxiosError;
         let snackMessage: string = "";
 
-        if (error.status === 406) {
-          let data = error.response?.data as { message: string };
+        switch (error.status) {
+          case 406: {
+            let data = error.response?.data as { message: string };
 
-          if (data.message === "DUPLICATE_USERNAME") {
-            snackMessage = "Il existe un utilisateur avec ce nom !";
-          } else if (data.message === "DUPLICATE_EMAIL") {
-            snackMessage = "Il existe un utilisateur avec cette email !";
+            switch (data.message) {
+              case "DUPLICATE_USERNAME": {
+                snackMessage = "Il existe un utilisateur avec ce nom !";
+                break;
+              }
+
+              case "DUPLICATE_EMAIL": {
+                snackMessage = "Il existe un utilisateur avec cette email !";
+                break;
+              }
+            }
+
+            enqueueSnackbar(snackMessage);
+
+            break;
           }
-        } else {
-          snackMessage = "Il se peut que ces données soient incorrectes !";
-          alert(error.message);
-        }
 
-        enqueueSnackbar(snackMessage);
-        enqueueSnackbar("Oups ! La requête a échoué !");
+          case 404: {
+            enqueueSnackbar("Compte introuvable, créez-le peut-être !");
+            break;
+          }
+
+          case 500: {
+            // On suppose que jusqu'ici, les seules erreurs 500 lâchées
+            // ce sont celles produites dans la stratégie
+            enqueueSnackbar("Compte inexistant, veuillez le créez !");
+            navigateTo("/client/auth/signup");
+            break;
+          }
+
+          default: {
+            enqueueSnackbar("Erreur, vous n'avez pas été connecté !");
+            break;
+          }
+        }
 
         return error;
       }
@@ -98,14 +132,4 @@ export const useAuthenticate = () => {
     isError,
     isLogginOut,
   };
-};
-
-export const useHasCookie = () => {
-  const cookies: { "connect.sid"?: string } = useCookies(["connect.sid"])["0"];
-
-  let hasCookie: boolean = cookies["connect.sid"] !== undefined;
-
-  if (!hasCookie) localStorage.removeItem("auth-user");
-
-  return hasCookie;
 };

@@ -7,8 +7,16 @@ const RUNENV = process.env.RUNENV || "dev";
 
 export const signUpLocal = async (req, res) => {
   try {
-    const user = await User.create(req.body);
-    res.json(user);
+    const user = await User.create({
+      name: req.body.name,
+      password: req.body.password,
+      email: req.body.email?.trim().length === 0 ? undefined : req.body.email,
+    });
+    res
+      .cookie("no.auth", "true", {
+        maxAge: 60,
+      })
+      .json(user);
   } catch (e) {
     let message = e.message;
     let name = e.message;
