@@ -236,6 +236,11 @@ $top__and__actions: 62px;
 
         & > * {
           margin-bottom: 0.8rem;
+          text-align: center;
+        }
+
+        .no__data {
+          @extend .no__state__button;
         }
       }
 

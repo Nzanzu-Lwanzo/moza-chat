@@ -59,7 +59,7 @@ const ChatRoomMenuActions = () => {
           {isDeletingRoom ? (
             <Loader height={15} width={15}></Loader>
           ) : (
-            " Supprimer le groupe"
+            " Supprimer la room"
           )}
         </button>
       )}
