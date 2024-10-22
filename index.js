@@ -49,7 +49,7 @@ const io = new Server(server, {
 });
 
 App.use(express.json());
-App.use(express.static(join(__dirname, "/frontend/dist")));
+App.use(express.static(join(__dirname, "frontend", "dist")));
 
 App.use((req, res, next) => {
   let method = req.method;
@@ -93,7 +93,9 @@ App.use(authenticateRequests);
 App.use("/api/user", userRouter);
 App.use("/api/message", messageRouter);
 App.use("/api/room", roomRouter);
-App.get("*", (req, res) => res.sendFile("/index.html"));
+App.get("*", (req, res) => {
+  res.sendFile(join(__dirname, "frontend", "dist", "index.html"));
+});
 
 const CONNECTED_USERS_MAP = {};
 
