@@ -22,7 +22,7 @@ const App = express();
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const PORT = process.env.PORT || 5000;
 const MONGODB_URI = process.env.MONGODB_URI;
-const RUNENV = process.env.RUNENV || "dev";
+const RUNENV = process.env.RUNENV || "prod";
 const SECRET = process.env.SECRET;
 const WHITELIST_ORIGINS = [
   "http://localhost:5000",

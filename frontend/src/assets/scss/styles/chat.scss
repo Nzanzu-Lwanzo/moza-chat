@@ -778,7 +778,7 @@ $top__and__actions: 62px;
     width: 100vw;
     height: 100%;
     border-radius: 0;
-    display: block;
+    grid-template-columns: auto;
 
     .part {
       &:last-of-type {
