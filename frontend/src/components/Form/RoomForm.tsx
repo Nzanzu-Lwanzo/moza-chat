@@ -1,7 +1,7 @@
 import { XCircle } from "@phosphor-icons/react";
 import useAppStore from "../../stores/AppStore";
 import { useState } from "react";
-import { RoomType } from "../../utils/@types";
+import { RoomType } from "../../typings/@types";
 import { useCreateRoom } from "../../hooks/useRooms";
 import Loader from "../CrossApp/Loader";
 import { enqueueSnackbar } from "notistack";

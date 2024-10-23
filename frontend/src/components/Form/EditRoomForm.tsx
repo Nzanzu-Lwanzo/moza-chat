@@ -1,7 +1,7 @@
 import { XCircle } from "@phosphor-icons/react";
 import { COLOR_SCHEMA } from "../../utils/constants";
 import { PropsWithChildren, useState } from "react";
-import { RoomType } from "../../utils/@types";
+import { RoomType } from "../../typings/@types";
 import useChatStore from "../../stores/ChatStore";
 import Loader from "../CrossApp/Loader";
 import { useUpdateRoom } from "../../hooks/useRooms";

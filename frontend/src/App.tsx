@@ -13,7 +13,7 @@ import { useEffect } from "react";
 import Axios from "axios";
 import { BASE_URL } from "./utils/constants";
 import useChatStore from "./stores/ChatStore";
-import { UserType } from "./utils/@types";
+import { UserType } from "./typings/@types";
 
 const client = new QueryClient({
   defaultOptions: {
@@ -32,8 +32,6 @@ function App() {
   useEffect(() => {
     openLocalDatabase({
       onOpenSuccess: () => {
-        enqueueSnackbar("IDB initialized successfully !");
-
         Axios.get(BASE_URL.concat("/user/"), { withCredentials: true })
           .then((response) => {
             const data = response.data;

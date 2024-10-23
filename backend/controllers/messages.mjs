@@ -11,8 +11,15 @@ import mongoose from "mongoose";
  * @returns {Message}
  */
 export const createMessage = async (message, send) => {
-  const createdMessage = (await Message.create(message)).populate({
-    path: "sendee",
+  const createdMessage = await (
+    await (
+      await Message.create(message)
+    ).populate({
+      path: "sendee",
+      select: "_id name",
+    })
+  ).populate({
+    path: "room",
     select: "_id name",
   });
 

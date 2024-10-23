@@ -3,7 +3,7 @@ import Loader from "../components/CrossApp/Loader";
 import { Link } from "react-router-dom";
 import { useAuthenticate } from "../hooks/useAuth";
 import React, { useState } from "react";
-import { SignUpUserType } from "../utils/@types";
+import { SignUpUserType } from "../typings/@types";
 import { enqueueSnackbar } from "notistack";
 
 const SignUp = () => {

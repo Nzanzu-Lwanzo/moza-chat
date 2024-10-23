@@ -3,10 +3,13 @@ import useAppStore from "../../stores/AppStore";
 import useChatStore from "../../stores/ChatStore";
 import MessageElt from "./MessageElt";
 import NoMessage from "./NoMessage";
+import { useGetRoom } from "../../hooks/useRooms";
+import WholeElementLoader from "../CrossApp/WholeElementLoader";
 
 const MessagesList = () => {
   const messages = useChatStore((state) => state.messages);
   const auth = useAppStore((state) => state.auth);
+  const { is_updating_messages_state, status } = useGetRoom();
 
   const messageBoxRef = useRef<HTMLLIElement | null>(null);
 
@@ -31,6 +34,8 @@ const MessagesList = () => {
             );
           })}
         </ul>
+      ) : is_updating_messages_state || status == "pending" ? (
+        <WholeElementLoader message="Patientez, nous chargeons les messages de cette room !"></WholeElementLoader>
       ) : (
         <NoMessage></NoMessage>
       )}

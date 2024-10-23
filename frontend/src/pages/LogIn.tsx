@@ -2,7 +2,7 @@ import AuthFormParent from "../components/Auth/Parent";
 import { Link } from "react-router-dom";
 import { useAuthenticate } from "../hooks/useAuth";
 import React, { useState } from "react";
-import { LogInUserType } from "../utils/@types";
+import { LogInUserType } from "../typings/@types";
 import { enqueueSnackbar } from "notistack";
 import Loader from "../components/CrossApp/Loader";
 

@@ -744,6 +744,30 @@ $top__and__actions: 62px;
   }
 }
 
+// SETTINGS MODAL CARD
+.settings__card {
+  padding: 0 1rem 1rem;
+  h2 {
+    margin-bottom: .7rem;
+  }
+
+  .list__btns {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    flex-direction: column;
+    gap: .8rem;
+
+    .btn {
+      @extend .no__state__button;
+      width: 100%;
+      text-align: left;
+      padding-block: .5rem;
+    }
+  }
+
+}
+
 // MEDIA QUERIES
 @media only all and (max-width: 1300px) {
   .chat__card {

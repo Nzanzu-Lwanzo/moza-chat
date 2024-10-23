@@ -1,5 +1,5 @@
 import useChatStore from "../../stores/ChatStore";
-import { UserType } from "../../utils/@types";
+import { UserType } from "../../typings/@types";
 import { COLOR_SCHEMA } from "../../utils/constants";
 import Avatar from "boring-avatars";
 import { useState } from "react";
@@ -56,9 +56,10 @@ const RoomUsers = () => {
                 )}
               </div>
 
+              {/* The room initiator cant' remove themselves from the Chat Room */}
               {hasAdminCreds && auth?._id !== user._id && (
                 <div className="actions">
-                  {useHasRoomAdminCreds(user, currentRoom) && (
+                  {hasAdminCreds && (
                     <input
                       type="checkbox"
                       style={{ accentColor: COLOR_SCHEMA.accent }}

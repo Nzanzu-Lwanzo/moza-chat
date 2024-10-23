@@ -13,10 +13,14 @@ import { formatDate } from "../../utils/formatters";
 import AllUsers from "./AllUsers";
 import RoomUsers from "./RoomUsers";
 import EditRoomForm from "../Form/EditRoomForm";
-import { useHasCredentialsOnRoom } from "../../hooks/useValidate";
+import {
+  useHasCredentialsOnRoom,
+  useHasRoomAdminCreds,
+} from "../../hooks/useValidate";
 import { useDeleteRoom } from "../../hooks/useRooms";
 import Loader from "../CrossApp/Loader";
 import { convert } from "html-to-text";
+import useAppStore from "../../stores/AppStore";
 
 type ActionType = "all_users" | "room_users" | "edit_form";
 
@@ -38,6 +42,7 @@ const reducer = (state: ActionType, action: Actions) => {
 
 const RoomInfos = () => {
   const { setCurrentMainPanel, currentRoom } = useChatStore();
+  const auth = useAppStore((state) => state.auth);
   const [showDetails, setShowDetails] = useState(true);
   const [currentSection, switchToSection] = useReducer(reducer, "room_users");
   const { mutate: deleteRoom, isPending: isDeleting } = useDeleteRoom({
@@ -49,7 +54,8 @@ const RoomInfos = () => {
     },
   });
 
-  let hasCreds = useHasCredentialsOnRoom();
+  let hasCredsOnRoom = useHasCredentialsOnRoom();
+  let hasAdminCreds = useHasRoomAdminCreds(auth!, currentRoom!);
 
   return (
     <div className="room__infos__panel">
@@ -98,27 +104,39 @@ const RoomInfos = () => {
             </>
           )}
 
-          {/* Only the iniator of the room can perform theses actions the room if the room is restricted */}
-          {hasCreds && (
-            <>
-              <button
-                type="button"
-                className="icon__btn__on__dark"
-                onClick={() => {
+          {/* Only the initiator of the Chat Room can delete it  */}
+          {hasAdminCreds && (
+            <button
+              type="button"
+              className="icon__btn__on__dark"
+              onClick={() => {
+                let confirmed = confirm(
+                  `Confirmez-vous la suppression de la Chat Room nommée ${
+                    currentRoom?.name || "NO_CURRENT_ROOM_STATE"
+                  }`
+                );
+
+                if (confirmed) {
                   deleteRoom(currentRoom?._id);
-                }}
-              >
-                {isDeleting ? (
-                  <Loader
-                    height={18}
-                    width={18}
-                    trackColor={COLOR_SCHEMA.accent}
-                    ringColor={COLOR_SCHEMA.whity}
-                  />
-                ) : (
-                  <Trash size={20} fill={COLOR_SCHEMA.whity} />
-                )}
-              </button>
+                }
+              }}
+            >
+              {isDeleting ? (
+                <Loader
+                  height={18}
+                  width={18}
+                  trackColor={COLOR_SCHEMA.accent}
+                  ringColor={COLOR_SCHEMA.whity}
+                />
+              ) : (
+                <Trash size={20} fill={COLOR_SCHEMA.whity} />
+              )}
+            </button>
+          )}
+
+          {/* Only the iniator of the room can perform theses actions the room if the room is restricted */}
+          {hasCredsOnRoom && (
+            <>
               <button
                 type="button"
                 className="icon__btn__on__dark"

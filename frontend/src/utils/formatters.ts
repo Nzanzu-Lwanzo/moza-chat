@@ -31,7 +31,7 @@ export const formatDate = (
   let hours = date.getHours();
   let mins = date.getMinutes();
 
-  let time = `${hours}:${mins}`;
+  let time = `${hours}:${mins > 9 ? mins : "0".concat(mins.toString())}`;
 
-  return `${day}.${month}.${year} ${includeTime ? time: ""}`;
+  return `${day}.${month}.${year} à ${includeTime ? time : ""}`;
 };

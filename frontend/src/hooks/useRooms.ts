@@ -2,7 +2,7 @@ import useAppStore from "../stores/AppStore";
 import Axios, { AxiosError, AxiosResponse } from "axios";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { BASE_URL } from "../utils/constants";
-import { RoomType } from "../utils/@types";
+import { RoomType } from "../typings/@types";
 import { useNavigate } from "react-router-dom";
 import { enqueueSnackbar } from "notistack";
 import { idbConnection } from "../db/connection";
@@ -11,11 +11,11 @@ import { useState, useTransition } from "react";
 
 export const useGetRooms = () => {
   const { auth } = useAppStore();
-  const { setRooms } = useChatStore();
+  const { setRoomsAndReplace } = useChatStore();
 
   const navigateTo = useNavigate();
 
-  const { data, isFetching, isError, isSuccess } = useQuery({
+  const { data, isFetching, isError, isSuccess, refetch } = useQuery({
     queryKey: ["rooms"],
     queryFn: async () => {
       try {
@@ -45,11 +45,12 @@ export const useGetRooms = () => {
             (room.private && room.initiated_by?._id === auth?._id)
           );
         });
-        setRooms(chosenRooms);
+        setRoomsAndReplace(chosenRooms);
 
         return chosenRooms;
       } catch (e) {
         let error = e as AxiosError;
+
         if (error.response?.status === 401) {
           enqueueSnackbar("Connectez vous à votre compte !");
           navigateTo("/client/auth/login");
@@ -59,9 +60,10 @@ export const useGetRooms = () => {
         return e;
       }
     },
+    refetchInterval: 10 * 60 * 1000,
   });
 
-  return { data, isFetching, isError, isSuccess };
+  return { data, isFetching, isError, isSuccess, refetch };
 };
 
 export const useCreateRoom = () => {

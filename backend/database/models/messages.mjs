@@ -16,7 +16,7 @@ const MessageSchema = new mongoose.Schema(
 
     room: {
       type: mongoose.SchemaTypes.ObjectId,
-      ref: "User",
+      ref: "Room",
     },
 
     refBy: [

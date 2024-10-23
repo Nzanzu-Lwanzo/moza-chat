@@ -43,6 +43,7 @@ export const getValidData = (req, res, next) => {
  */
 export const authenticateRequests = (req, res, next) => {
   const { "connect.sid": authCookie } = req.cookies;
+
   if (!authCookie) return res.sendStatus(401);
   next();
 };

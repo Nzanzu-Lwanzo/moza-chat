@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { MessageType, RoomType, UserType } from "../utils/@types";
+import { MessageType, RoomType, UserType } from "../typings/@types";
 
 interface State {
   messages: MessageType[];
@@ -33,6 +33,7 @@ const useChatStore = create<State & Actions>()((set) => ({
   messages: [],
   currentMainPanel: "MESSAGES",
   allUsers: [],
+ 
   chatRoomVisibleOnMobile: false,
   connectedUsers: [],
   setRooms(rooms) {

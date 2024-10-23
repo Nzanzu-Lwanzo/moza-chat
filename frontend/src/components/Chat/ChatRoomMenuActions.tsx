@@ -29,7 +29,15 @@ const ChatRoomMenuActions = () => {
         <button
           type="button"
           className=""
-          onClick={() => quitRoom({ rid: currentRoom?._id, uid: auth?._id })}
+          onClick={() => {
+            let confirmed = confirm(
+              `Confirmez-vous que vous souhaitez quitter cette Chat Room ?`
+            );
+
+            if (confirmed) {
+              quitRoom({ rid: currentRoom?._id, uid: auth?._id });
+            }
+          }}
         >
           {isQuittingRoom ? (
             <Loader height={15} width={15}></Loader>
@@ -41,7 +49,15 @@ const ChatRoomMenuActions = () => {
       <button
         type="button"
         className=""
-        onClick={() => mutate(currentRoom?._id)}
+        onClick={() => {
+          let confirmed = confirm(
+            "Confirmez-vous que vous voulez supprimer tous vos messages ?"
+          );
+
+          if (confirmed) {
+            mutate(currentRoom?._id);
+          }
+        }}
       >
         {isUpdatingStateAfterDeletingAllMessages || isDeletingAllMessages ? (
           <Loader height={15} width={15}></Loader>
@@ -54,7 +70,17 @@ const ChatRoomMenuActions = () => {
         <button
           type="button"
           className=""
-          onClick={() => deleteRoom(currentRoom?._id)}
+          onClick={() => {
+            let confirmed = confirm(
+              `Confirmez-vous la suppression de la Chat Room nommée ${
+                currentRoom?.name || "NO_CURRENT_ROOM_STATE"
+              }`
+            );
+
+            if (confirmed) {
+              deleteRoom(currentRoom?._id);
+            }
+          }}
         >
           {isDeletingRoom ? (
             <Loader height={15} width={15}></Loader>

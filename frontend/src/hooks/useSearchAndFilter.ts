@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState, useTransition } from "react";
 import useAppStore from "../stores/AppStore";
 import { State } from "../stores/SearchAndFilterStore";
 import { idbConnection } from "../db/connection";
-import { RoomType, UserType } from "../utils/@types";
+import { RoomType, UserType } from "../typings/@types";
 import { enqueueSnackbar } from "notistack";
 import useChatStore from "../stores/ChatStore";
 

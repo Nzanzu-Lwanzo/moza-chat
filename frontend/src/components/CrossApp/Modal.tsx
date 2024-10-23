@@ -2,10 +2,12 @@ import React from "react";
 import useAppStore from "../../stores/AppStore";
 import type { ModalType } from "../../stores/AppStore";
 import RoomForm from "../Form/RoomForm";
+import Settings from "../Chat/Settings";
 
 const MAP_MODAL_ELT: Record<NonNullable<ModalType>, React.ReactElement> = {
   ROOM_FORM: <RoomForm />,
   PROFILE: <RoomForm />,
+  SETTINGS: <Settings />,
 };
 
 const Modal = () => {

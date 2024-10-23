@@ -3,7 +3,7 @@ import Avatar from "boring-avatars";
 import { PaperPlane, PencilCircle, Trash } from "@phosphor-icons/react";
 import { COLOR_SCHEMA } from "../../utils/constants";
 import { PropsWithChildren, useState } from "react";
-import { MessageType } from "../../utils/@types";
+import { MessageType } from "../../typings/@types";
 import { useDeleleMessage } from "../../hooks/useMessages";
 import Loader from "../CrossApp/Loader";
 import useChatStore from "../../stores/ChatStore";
@@ -25,7 +25,7 @@ const MessageElt = ({ message, who }: PropsWithChildren<Props>) => {
       <div className="menu__on__message">
         <div className="author">
           <Avatar size={30}></Avatar>
-          <span>{formatUserName(message?.sendee.name)}</span>
+          <span>{formatUserName(message?.sendee?.name)}</span>
           <span
             className={`online__status ${
               connectedUsers.includes(message?.sendee._id!)
@@ -90,8 +90,10 @@ const MessageElt = ({ message, who }: PropsWithChildren<Props>) => {
         )}
       </div>
       <div className="tags">
-        <span className="date__tag">{formatDate(message?.createdAt)}</span>
-        <span className="tag">édité</span>
+        <span className="date__tag">
+          {formatDate(message?.createdAt, true)}
+        </span>
+        {/* <span className="tag">édité</span> */}
       </div>
     </>
   );

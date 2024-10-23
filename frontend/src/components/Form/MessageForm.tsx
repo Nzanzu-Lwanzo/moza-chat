@@ -11,7 +11,7 @@ const MessageForm = () => {
   const auth = useAppStore((state) => state.auth);
   let [focus, setFocus] = useState(false);
   const [messageText, setMessageText] = useState("");
-  const currentRoom = useChatStore((state) => state.currentRoom);
+  const { currentRoom } = useChatStore();
 
   const { socket } = useSocketContext()!;
 

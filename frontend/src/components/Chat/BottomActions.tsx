@@ -1,14 +1,21 @@
-import { Info, SignOut, User } from "@phosphor-icons/react";
+import {
+  Info,
+  SignOut,
+  Gear,
+  ArrowsCounterClockwise,
+} from "@phosphor-icons/react";
 import { memo } from "react";
 import { useAuthenticate } from "../../hooks/useAuth";
 import Loader from "../CrossApp/Loader";
 import { formatUserName } from "../../utils/formatters";
 import useAppStore from "../../stores/AppStore";
 import { Link } from "react-router-dom";
+import { useGetRooms } from "../../hooks/useRooms";
 
 const BottomActions = memo(() => {
   const { isLogginOut, logout } = useAuthenticate();
-  const { auth } = useAppStore();
+  const { auth, setModal } = useAppStore();
+  const { refetch } = useGetRooms();
 
   return (
     <>
@@ -20,8 +27,19 @@ const BottomActions = memo(() => {
             <SignOut size={20} />
           )}
         </button>
-        <button type="button" className="action">
-          <User size={20} />
+        <button
+          type="button"
+          className="action"
+          onClick={() => setModal("SETTINGS")}
+        >
+          <Gear size={20} />
+        </button>
+        <button
+          type="button"
+          className="action"
+          onClick={() => refetch({ throwOnError: false })}
+        >
+          <ArrowsCounterClockwise size={20} />
         </button>
         <Link to="/#about" type="button" className="action">
           <Info size={20} />

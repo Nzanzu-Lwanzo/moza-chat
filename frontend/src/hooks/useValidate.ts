@@ -1,6 +1,6 @@
 import useAppStore from "../stores/AppStore";
 import useChatStore from "../stores/ChatStore";
-import { RoomType, UserType } from "../utils/@types";
+import { RoomType, UserType } from "../typings/@types";
 
 export const useHasCredentialsOnRoom = (): boolean => {
   const room = useChatStore((state) => state.currentRoom);

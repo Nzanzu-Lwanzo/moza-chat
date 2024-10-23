@@ -1,4 +1,4 @@
-import { UserType } from "../../utils/@types";
+import { UserType } from "../../typings/@types";
 import Avatar from "boring-avatars";
 import { ArrowsCounterClockwise } from "@phosphor-icons/react";
 import { COLOR_SCHEMA } from "../../utils/constants";
@@ -97,9 +97,7 @@ const AllUsers = () => {
                     <li key={user._id}>
                       <div className="user">
                         <Avatar size={25} name={user.name} />
-                        <span>
-                          {user.name}
-                        </span>
+                        <span>{user.name}</span>
                       </div>
                       <div className="actions">
                         <input

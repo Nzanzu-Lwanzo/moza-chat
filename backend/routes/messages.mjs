@@ -3,12 +3,15 @@ import {
   deleteAllUserMessagesFromRoom,
   deleteMessage,
 } from "../controllers/messages.mjs";
-import { validateParamId } from "../utils/middlewares.mjs";
+import {
+  authenticateRequests,
+  validateParamId,
+} from "../utils/middlewares.mjs";
 
 const messageRouter = Router();
 
+messageRouter.use(authenticateRequests);
 messageRouter.delete("/:id", validateParamId, deleteMessage);
-
 messageRouter.delete(
   "/all/:id",
   validateParamId,

@@ -7,9 +7,10 @@ import {
 } from "react";
 import { io, Socket } from "socket.io-client";
 import { ORIGIN } from "../utils/constants";
-import { MessageType } from "../utils/@types";
+import { MessageType } from "../typings/@types";
 import useChatStore from "../stores/ChatStore";
 import useAppStore from "../stores/AppStore";
+import { useNotificate } from "../utils/notifications";
 
 export interface SocketContextType {
   socket: Socket | undefined;
@@ -24,8 +25,10 @@ const useSocketContext = (): SocketContextType | null => {
 const SocketContextProvider = ({ children }: PropsWithChildren) => {
   const [socket, setSocket] = useState<SocketContextType["socket"]>();
   const { addMessage, setConnectedUsers } = useChatStore();
-  const auth = useAppStore((state) => state.auth);
+  const { auth, setSettingsGrant } = useAppStore();
+  const notificate = useNotificate();
 
+  // Socket effect
   useEffect(() => {
     const socket = io(ORIGIN, {
       withCredentials: true,
@@ -40,12 +43,13 @@ const SocketContextProvider = ({ children }: PropsWithChildren) => {
     const onMessage = (data: MessageType) => {
       // Save the current message in state
       addMessage(data);
+      notificate(data, auth?._id === data.sendee._id);
+      console.log(data);
     };
 
     socket.on("message", onMessage);
 
     const onConnectedUsers = (connected_users: string[]) => {
-      console.log(connected_users);
       setConnectedUsers(connected_users);
     };
 
@@ -56,6 +60,20 @@ const SocketContextProvider = ({ children }: PropsWithChildren) => {
       socket?.off("connected_clients", onConnectedUsers);
     };
   }, [auth, setSocket]);
+
+  // Notifications effect
+
+  useEffect(() => {
+    if ("Notification" in window && Notification.permission === "default") {
+      Notification.requestPermission()
+        .then((permission) => {
+          if (permission === "granted") {
+            setSettingsGrant("canNotificate", true);
+          }
+        })
+        .catch(() => null);
+    }
+  }, []);
 
   const value: SocketContextType = {
     socket,

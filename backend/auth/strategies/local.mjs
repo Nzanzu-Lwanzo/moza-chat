@@ -20,12 +20,6 @@ export default passport.use(
 
       if (!user) throw new Error("USER_NOT_FOUND");
 
-      console.log({
-        password,
-        userPassword: user.password,
-        good: validate(password, user.password),
-      });
-
       if (!validate(password, user.password))
         throw new Error("BAD_CREDENTIALS");
 

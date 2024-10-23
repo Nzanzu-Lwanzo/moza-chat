@@ -11,7 +11,6 @@ import authRouter from "./backend/auth/routes/auth.mjs";
 import session from "express-session";
 import cookieParser from "cookie-parser";
 import passport from "passport";
-import { authenticateRequests } from "./backend/utils/middlewares.mjs";
 import MongoStore from "connect-mongo";
 import cors from "cors";
 import { createServer } from "node:http";
@@ -74,7 +73,7 @@ App.use(
       maxAge: cookiesMaxAge, // 30 days
       httpOnly: RUNENV !== "dev",
       secure: RUNENV !== "dev",
-      sameSite: "none",
+      sameSite: RUNENV !== "dev" ? "none" : "lax",
     },
     store: MongoStore.create({
       mongoUrl: MONGODB_URI,
@@ -88,8 +87,6 @@ App.use(passport.initialize());
 App.use(passport.session());
 
 App.use("/api/auth", authRouter);
-
-App.use(authenticateRequests);
 App.use("/api/user", userRouter);
 App.use("/api/message", messageRouter);
 App.use("/api/room", roomRouter);

@@ -1,7 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
 import Axios from "axios";
 import { BASE_URL } from "../utils/constants";
-import { RoomType, UserType } from "../utils/@types";
+import { RoomType, UserType } from "../typings/@types";
 import useChatStore from "../stores/ChatStore";
 import { useState } from "react";
 import { idbConnection } from "../db/connection";
