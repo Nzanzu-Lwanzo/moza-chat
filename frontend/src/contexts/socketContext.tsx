@@ -42,9 +42,8 @@ const SocketContextProvider = ({ children }: PropsWithChildren) => {
 
     const onMessage = (data: MessageType) => {
       // Save the current message in state
-      addMessage(data);
       notificate(data, auth?._id === data.sendee._id);
-      console.log(data);
+      addMessage(data);
     };
 
     socket.on("message", onMessage);
