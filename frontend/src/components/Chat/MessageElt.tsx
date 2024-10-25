@@ -18,7 +18,7 @@ interface Props {
 
 const MessageElt = ({ message, who }: PropsWithChildren<Props>) => {
   const [isEditing, setIsEditing] = useState(false);
-  const { isDeleting, isPending, mutate } = useDeleleMessage();
+  const { isDeleting, isPending } = useDeleleMessage();
   const { connectedUsers, currentRoom } = useChatStore();
   const auth = useAppStore((state) => state.auth);
   const [toUpdateMessage, setToUpdateMessage] = useState(message?.content);
