@@ -1,6 +1,7 @@
 import {
   createContext,
   PropsWithChildren,
+  startTransition,
   useContext,
   useEffect,
   useState,
@@ -24,8 +25,14 @@ const useSocketContext = (): SocketContextType | null => {
 
 const SocketContextProvider = ({ children }: PropsWithChildren) => {
   const [socket, setSocket] = useState<SocketContextType["socket"]>();
-  const { addMessage, setConnectedUsers } = useChatStore();
-  const { auth, setSettingsGrant } = useAppStore();
+  const {
+    addMessage,
+    setConnectedUsers,
+    updateMessages,
+    deleteMessage,
+    deleteUserMessagesFromRoom,
+  } = useChatStore();
+  const { auth } = useAppStore();
   const notificate = useNotificate();
 
   // Socket effect
@@ -41,13 +48,35 @@ const SocketContextProvider = ({ children }: PropsWithChildren) => {
     setSocket(socket);
 
     const onMessage = (data: MessageType) => {
+      notificate(data, auth?._id === data.sendee._id);
       // Save the current message in state
       addMessage(data);
-      notificate(data, auth?._id === data.sendee._id);
+    };
+
+    const onUpdateMessage = (data: MessageType) => {
       console.log(data);
+      notificate(data, auth?._id === data.sendee._id);
+      // Update the message in state
+      updateMessages(data);
     };
 
     socket.on("message", onMessage);
+    socket.on("update_message", onUpdateMessage);
+    socket.on(
+      "delete_message",
+      ({ message_id }: { message_id: string; room_id: string }) => {
+        startTransition(() => deleteMessage(message_id));
+      }
+    );
+    socket.on(
+      "delete_messages",
+      (data: { uid: string; room_id: string } | undefined | null) => {
+        if (data) {
+          const { uid, room_id } = data;
+          deleteUserMessagesFromRoom(uid, room_id);
+        }
+      }
+    );
 
     const onConnectedUsers = (connected_users: string[]) => {
       setConnectedUsers(connected_users);
@@ -56,24 +85,10 @@ const SocketContextProvider = ({ children }: PropsWithChildren) => {
     socket?.on("connected_clients", onConnectedUsers);
 
     return () => {
-      socket.off("message", onMessage);
+      socket?.off("message", onMessage);
       socket?.off("connected_clients", onConnectedUsers);
     };
   }, [auth, setSocket]);
-
-  // Notifications effect
-
-  useEffect(() => {
-    if ("Notification" in window && Notification.permission === "default") {
-      Notification.requestPermission()
-        .then((permission) => {
-          if (permission === "granted") {
-            setSettingsGrant("canNotificate", true);
-          }
-        })
-        .catch(() => null);
-    }
-  }, []);
 
   const value: SocketContextType = {
     socket,

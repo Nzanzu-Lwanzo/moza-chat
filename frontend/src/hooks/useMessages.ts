@@ -5,6 +5,7 @@ import { BASE_URL } from "../utils/constants";
 import useChatStore from "../stores/ChatStore";
 import { useTransition } from "react";
 import useAppStore from "../stores/AppStore";
+import { MessageType } from "../typings/@types";
 
 export const useDeleleMessage = () => {
   const removeMessage = useChatStore((state) => state.deleteMessage);
@@ -64,4 +65,34 @@ export const useDeleteMessages = () => {
   });
 
   return { isDeleting, mutate, isPending };
+};
+
+export const useUpdateMessage = (id: string, onSuccess?: () => void) => {
+  const updateMessages = useChatStore((state) => state.updateMessages);
+  const [updating, startTransition] = useTransition();
+
+  const { mutate, isPending } = useMutation({
+    mutationKey: ["message"],
+    mutationFn: async (content: string) => {
+      if (!id) return;
+      try {
+        const response = await Axios.patch(
+          BASE_URL.concat(`/message/${id}`),
+          { content },
+          { withCredentials: true }
+        );
+
+        if (onSuccess && typeof onSuccess === "function") onSuccess();
+
+        const data = response.data as MessageType;
+        startTransition(() => updateMessages(data));
+
+        return data;
+      } catch (e) {
+        enqueueSnackbar("Erreur : echec de modification !");
+      }
+    },
+  });
+
+  return { updating, mutate, isPending };
 };

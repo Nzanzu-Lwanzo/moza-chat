@@ -241,6 +241,7 @@ $top__and__actions: 62px;
 
         .no__data {
           @extend .no__state__button;
+          display: none;
         }
       }
 
@@ -748,7 +749,7 @@ $top__and__actions: 62px;
 .settings__card {
   padding: 0 1rem 1rem;
   h2 {
-    margin-bottom: .7rem;
+    margin-bottom: 0.7rem;
   }
 
   .list__btns {
@@ -756,16 +757,15 @@ $top__and__actions: 62px;
     align-items: flex-start;
     justify-content: flex-start;
     flex-direction: column;
-    gap: .8rem;
+    gap: 0.8rem;
 
     .btn {
       @extend .no__state__button;
       width: 100%;
       text-align: left;
-      padding-block: .5rem;
+      padding-block: 0.5rem;
     }
   }
-
 }
 
 // MEDIA QUERIES
@@ -820,6 +820,11 @@ $top__and__actions: 62px;
 
         &.show__on__mobile {
           display: initial;
+        }
+
+        .no__chat__selected .no__data,
+        .no__message .no__data {
+          display: block;
         }
       }
     }

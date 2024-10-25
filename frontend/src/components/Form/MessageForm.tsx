@@ -7,6 +7,8 @@ import { useSocketContext } from "../../contexts/socketContext";
 import useChatStore from "../../stores/ChatStore";
 import { enqueueSnackbar } from "notistack";
 
+const sound = new Audio("/sounds/on-send-notif.mp3");
+
 const MessageForm = () => {
   const auth = useAppStore((state) => state.auth);
   let [focus, setFocus] = useState(false);
@@ -19,7 +21,6 @@ const MessageForm = () => {
     if (messageText.length == 0) {
       return;
     }
-
     const message = {
       content: messageText,
       room: currentRoom?._id,
@@ -29,6 +30,9 @@ const MessageForm = () => {
     setFocus(false);
 
     if (socket?.connected) {
+      // Play sound
+      sound.play().catch(() => null);
+      // Emit
       socket?.emit("message", message);
       setMessageText("");
     } else {

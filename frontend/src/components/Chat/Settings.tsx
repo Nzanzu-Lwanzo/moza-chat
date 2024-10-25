@@ -1,10 +1,10 @@
 import { XCircle } from "@phosphor-icons/react";
 import useAppStore from "../../stores/AppStore";
-import { useRequestNotifGrant } from "../../utils/notifications";
+import { usePushNotifications } from "../../utils/notifications";
 
 const Settings = () => {
   const { setModal } = useAppStore();
-  const requestNotificationGrant = useRequestNotifGrant();
+  const requestPushNotifications = usePushNotifications();
 
   return (
     <div className="actual__form">
@@ -31,7 +31,7 @@ const Settings = () => {
           <button
             type="button"
             className="btn"
-            onClick={requestNotificationGrant}
+            onClick={requestPushNotifications}
           >
             Cliquez pour autoriser les notifications
           </button>

@@ -15,7 +15,12 @@ import MongoStore from "connect-mongo";
 import cors from "cors";
 import { createServer } from "node:http";
 import { Server } from "socket.io";
-import { createMessage } from "./backend/controllers/messages.mjs";
+import {
+  createMessage,
+  deleteAllUserMessagesFromRoom,
+  updateMessage,
+} from "./backend/controllers/messages.mjs";
+import Message from "./backend/database/models/messages.mjs";
 
 const App = express();
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -115,6 +120,22 @@ io.on("connection", async (socket) => {
     io.to(data.room).emit("message", createdMessage);
   });
 
+  socket.on("update_message", async (data) => {
+    const updatedMessage = await updateMessage(data, user_id);
+    io.to(data.room).emit("update_message", updatedMessage);
+  });
+
+  socket.on("delete_message", async (data) => {
+    const deletedMessage = await Message.findByIdAndDelete(data.message_id);
+    io.to(data.room_id).emit("delete_message", data);
+  });
+
+  socket.on("delete_messages", async ({ user_id: uid, room_id }) => {
+    const deletedMessages = await deleteAllUserMessagesFromRoom(uid, room_id);
+    let dataToEmit = deletedMessages == 0 ? undefined : { uid, room_id };
+    io.to(room_id).emit("delete_messages", dataToEmit);
+  });
+
   socket.on("disconnect", () => {
     delete CONNECTED_USERS_MAP[user_id];
     io.emit("connected_clients", Object.keys(CONNECTED_USERS_MAP));
@@ -129,3 +150,5 @@ server.listen(PORT, () => {
     .then(() => {})
     .catch((e) => console.log(e.message.toUpperCase()));
 });
+
+export { io };

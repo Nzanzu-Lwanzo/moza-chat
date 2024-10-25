@@ -24,7 +24,9 @@ interface Actions {
   addMessage(message: MessageType): void;
   deleteMessage(id: string): void;
   deleteAuthMessages(id: string | undefined): void;
+  updateMessages(message: MessageType): void;
   setConnectedUsers(users: string[]): void;
+  deleteUserMessagesFromRoom(uid: string, rid: string): void;
 }
 
 const useChatStore = create<State & Actions>()((set) => ({
@@ -33,7 +35,7 @@ const useChatStore = create<State & Actions>()((set) => ({
   messages: [],
   currentMainPanel: "MESSAGES",
   allUsers: [],
- 
+
   chatRoomVisibleOnMobile: false,
   connectedUsers: [],
   setRooms(rooms) {
@@ -71,6 +73,7 @@ const useChatStore = create<State & Actions>()((set) => ({
     set((state) => ({ ...state, messages: [...state.messages, message] }));
   },
   deleteMessage(id) {
+    console.log(id, " is deleted");
     set((state) => ({
       ...state,
       messages: state.messages.filter((message) => message._id !== id),
@@ -86,8 +89,27 @@ const useChatStore = create<State & Actions>()((set) => ({
         : state.messages,
     }));
   },
+  updateMessages(message) {
+    set((state) => {
+      const messages = state.messages;
+      let idx = messages.findIndex((msg) => msg._id === message._id);
+      messages.splice(idx, 1, message);
+
+      return { ...state, messages };
+    });
+  },
   setConnectedUsers(users) {
     set((state) => ({ ...state, connectedUsers: users }));
+  },
+  deleteUserMessagesFromRoom(uid) {
+    set((state) => {
+      return {
+        ...state,
+        messages: state.messages.filter(
+          (message) => message.sendee._id !== uid
+        ),
+      };
+    });
   },
 }));
 

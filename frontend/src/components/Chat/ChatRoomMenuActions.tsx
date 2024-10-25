@@ -1,3 +1,5 @@
+import { enqueueSnackbar } from "notistack";
+import { useSocketContext } from "../../contexts/socketContext";
 import { useDeleteMessages } from "../../hooks/useMessages";
 import { useDeleteRoom } from "../../hooks/useRooms";
 import { useQuitRoom } from "../../hooks/useUsers";
@@ -16,6 +18,8 @@ const ChatRoomMenuActions = () => {
     },
   });
   const { mutate: quitRoom, isPending: isQuittingRoom } = useQuitRoom();
+
+  const { socket } = useSocketContext()!;
 
   const {
     isDeleting: isUpdatingStateAfterDeletingAllMessages,
@@ -50,12 +54,19 @@ const ChatRoomMenuActions = () => {
         type="button"
         className=""
         onClick={() => {
-          let confirmed = confirm(
-            "Confirmez-vous que vous voulez supprimer tous vos messages ?"
-          );
+          if (!socket?.connected) {
+            enqueueSnackbar("Vous êtes hors ligne !");
+          } else {
+            let confirmed = confirm(
+              "Confirmez-vous que vous voulez supprimer tous vos messages ?"
+            );
 
-          if (confirmed) {
-            mutate(currentRoom?._id);
+            if (confirmed) {
+              socket?.emit("delete_messages", {
+                user_id: auth?._id,
+                room_id: currentRoom?._id,
+              });
+            }
           }
         }}
       >

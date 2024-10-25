@@ -47,16 +47,45 @@ export const deleteMessage = async (req, res) => {
   }
 };
 
-export const deleteAllUserMessagesFromRoom = async (req, res) => {
+export const deleteAllUserMessagesFromRoom = async (user_id, room_id) => {
   try {
     const deletedMessages = await Message.deleteMany(
-      { sendee: new mongoose.Types.ObjectId(req.user._id) },
+      {
+        sendee: user_id,
+        room: room_id,
+      },
       {}
     );
-    console.log(deletedMessages);
-    res.sendStatus(204);
+    return deletedMessages;
   } catch (e) {
-    console.log(e);
-    res.sendStatus(400);
+    return 0;
+  }
+};
+
+export const updateMessage = async (data, user_id) => {
+  let { id, content } = data;
+  try {
+    const updatedMessage = await Message.findOneAndUpdate(
+      { _id: id, sendee: user_id },
+      { content },
+      {
+        new: true,
+        populate: [
+          {
+            path: "sendee",
+            select: "_id name",
+          },
+          ,
+          {
+            path: "room",
+            select: "_id name",
+          },
+        ],
+      }
+    );
+
+    return updatedMessage;
+  } catch (e) {
+    return await Message.findById(id);
   }
 };
