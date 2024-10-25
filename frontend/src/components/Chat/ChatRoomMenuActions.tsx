@@ -23,8 +23,7 @@ const ChatRoomMenuActions = () => {
 
   const {
     isDeleting: isUpdatingStateAfterDeletingAllMessages,
-    isPending: isDeletingAllMessages,
-    mutate,
+    isPending: isDeletingAllMessages
   } = useDeleteMessages();
 
   return (
