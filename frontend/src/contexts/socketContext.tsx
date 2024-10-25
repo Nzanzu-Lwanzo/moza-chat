@@ -54,9 +54,8 @@ const SocketContextProvider = ({ children }: PropsWithChildren) => {
     };
 
     const onUpdateMessage = (data: MessageType) => {
-      console.log(data);
       notificate(data, auth?._id === data.sendee._id);
-      // Update the message in state
+      // Update the current messages state
       updateMessages(data);
     };
 
