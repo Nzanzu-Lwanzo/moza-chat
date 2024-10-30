@@ -582,12 +582,22 @@ $top__and__actions: 62px;
     text-align: center;
     z-index: 3;
 
+
+
     h2 {
       font-weight: bold;
     }
 
-    button {
+    button.button__orange {
       @extend .no__state__button;
+    }
+
+    .close {
+      position: absolute;
+      top: 1rem;
+      right:1rem;
+      background-color: transparent;
+      cursor: pointer;
     }
   }
 }

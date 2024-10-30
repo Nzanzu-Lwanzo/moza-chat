@@ -17,7 +17,6 @@ const UserSchema = new mongoose.Schema({
       maxLengthName,
       `Le nom doit avoir une longueur de maximum : ${maxLengthName}`,
     ],
-    
   },
 
   email: {
@@ -34,6 +33,15 @@ const UserSchema = new mongoose.Schema({
   },
 
   picture: String,
+
+  subscription: {
+    endpoint: String,
+    expirationTime: Number,
+    keys: {
+      p256dh: String,
+      auth: String,
+    },
+  },
 });
 
 const User = mongoose.model("User", UserSchema);

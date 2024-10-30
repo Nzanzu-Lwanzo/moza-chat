@@ -70,10 +70,16 @@ const useChatStore = create<State & Actions>()((set) => ({
     set((state) => ({ ...state, chatRoomVisibleOnMobile: visible }));
   },
   addMessage(message) {
-    set((state) => ({ ...state, messages: [...state.messages, message] }));
+    // Add message to state if the belongs to the current room
+    set((state) => {
+      if (state.currentRoom?._id === message.room._id) {
+        return { ...state, messages: [...state.messages, message] };
+      } else {
+        return state;
+      }
+    });
   },
   deleteMessage(id) {
-    console.log(id, " is deleted");
     set((state) => ({
       ...state,
       messages: state.messages.filter((message) => message._id !== id),

@@ -6,8 +6,7 @@ import { XCircle } from "@phosphor-icons/react";
 import { useSocketContext } from "../../contexts/socketContext";
 import useChatStore from "../../stores/ChatStore";
 import { enqueueSnackbar } from "notistack";
-
-const sound = new Audio("/sounds/on-send-notif.mp3");
+import { UserType } from "../../typings/@types";
 
 const MessageForm = () => {
   const auth = useAppStore((state) => state.auth);
@@ -23,17 +22,20 @@ const MessageForm = () => {
     }
     const message = {
       content: messageText,
-      room: currentRoom?._id,
       sendee: auth?._id,
+      room: currentRoom?._id,
     };
 
     setFocus(false);
 
+    // Send notifications to these users
+    const all_ids = currentRoom?.participants
+      ?.map((participant) => (participant as UserType)._id)
+      .filter((id) => id !== auth?._id);
+
     if (socket?.connected) {
-      // Play sound
-      sound.play().catch(() => null);
       // Emit
-      socket?.emit("message", message);
+      socket?.emit("message", { message, all_ids, room: currentRoom?._id });
       setMessageText("");
     } else {
       enqueueSnackbar("Vous êtes hors ligne !");

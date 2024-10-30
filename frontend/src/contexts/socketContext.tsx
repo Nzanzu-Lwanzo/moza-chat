@@ -48,7 +48,8 @@ const SocketContextProvider = ({ children }: PropsWithChildren) => {
     setSocket(socket);
 
     const onMessage = (data: MessageType) => {
-      notificate(data, auth?._id === data.sendee._id);
+      let selfissendee = auth?._id === data.sendee._id;
+      notificate(data, selfissendee);
       // Save the current message in state
       addMessage(data);
     };

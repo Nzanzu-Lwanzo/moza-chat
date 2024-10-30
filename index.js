@@ -1,3 +1,4 @@
+// IMPORTS *****************************************************
 import dotenv from "dotenv";
 dotenv.config();
 import express from "express";
@@ -21,12 +22,16 @@ import {
   updateMessage,
 } from "./backend/controllers/messages.mjs";
 import Message from "./backend/database/models/messages.mjs";
+import webpush from "web-push";
+import { authenticateRequests } from "./backend/utils/middlewares.mjs";
+import User from "./backend/database/models/users.mjs";
 
+// VARIABLES AND CONSTANTS ****************************************
 const App = express();
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const PORT = process.env.PORT || 5000;
 const MONGODB_URI = process.env.MONGODB_URI;
-const RUNENV = process.env.RUNENV || "prod";
+const RUNENV = process.env.RUNENV || "dev";
 const SECRET = process.env.SECRET;
 const WHITELIST_ORIGINS = [
   "http://localhost:5000",
@@ -52,9 +57,20 @@ const io = new Server(server, {
   },
 });
 
+// WEBPUSH
+const webPushMailTo = "nzanzu.lwanzo.work@gmail.com";
+const VAPID_PUBLIC_KEY = process.env.VAPID_PUBLIC_KEY;
+const VAPID_PRIVATE_KEY = process.env.VAPID_PRIVATE_KEY;
+
+webpush.setVapidDetails(
+  `mailto:${webPushMailTo}`,
+  VAPID_PUBLIC_KEY,
+  VAPID_PRIVATE_KEY
+);
+
+// MIDDLEWARES AND ROUTES *******************************************
 App.use(express.json());
 App.use(express.static(join(__dirname, "frontend", "dist")));
-
 App.use((req, res, next) => {
   let method = req.method;
   let url = req.url;
@@ -91,6 +107,27 @@ App.use(
 App.use(passport.initialize());
 App.use(passport.session());
 
+App.use(authenticateRequests).post(
+  "/api/subscribe-to-push",
+  async (req, res) => {
+    const subscription = req.body;
+
+    if (!subscription.endpoint || !subscription.keys) {
+      return res.sendStatus(400);
+    }
+
+    try {
+      // Save it on the User model
+      await User.findByIdAndUpdate(req.user._id, { $set: { subscription } });
+
+      res
+        .status(200)
+        .json({ ok: true, message: "Subscription saved into the database !" });
+    } catch (e) {
+      res.sendStatus(400);
+    }
+  }
+);
 App.use("/api/auth", authRouter);
 App.use("/api/user", userRouter);
 App.use("/api/message", messageRouter);
@@ -99,6 +136,7 @@ App.get("*", (req, res) => {
   res.sendFile(join(__dirname, "frontend", "dist", "index.html"));
 });
 
+// SOCKET IO ****************************************************
 const CONNECTED_USERS_MAP = {};
 
 io.on("connection", async (socket) => {
@@ -114,10 +152,29 @@ io.on("connection", async (socket) => {
   });
 
   socket.on("message", async (data) => {
-    const createdMessage = await createMessage(data);
+    const createdMessage = await createMessage(data.message);
 
     // Send to a specific room
     io.to(data.room).emit("message", createdMessage);
+
+    // Send notifications
+    // try {
+    //   data?.all_ids?.forEach(async (id) => {
+    //     const { subscription } = await User.findById(id, {
+    //       _id: false,
+    //       subscription: true,
+    //     });
+    //     try {
+    //       webpush.sendNotification(
+    //         subscription,
+    //         JSON.stringify(createdMessage),
+    //         {
+    //           urgency: "high",
+    //         }
+    //       );
+    //     } catch (e) {}
+    //   });
+    // } catch (e) {}
   });
 
   socket.on("update_message", async (data) => {
@@ -142,6 +199,7 @@ io.on("connection", async (socket) => {
   });
 });
 
+// SERVER LISTEN *************************************************
 server.listen(PORT, () => {
   mongoose
     .connect(MONGODB_URI, {
@@ -151,4 +209,5 @@ server.listen(PORT, () => {
     .catch((e) => console.log(e.message.toUpperCase()));
 });
 
+// EXPORTS *******************************************************
 export { io };

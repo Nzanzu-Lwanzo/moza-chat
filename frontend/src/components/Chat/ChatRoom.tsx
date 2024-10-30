@@ -5,6 +5,7 @@ import {
   ArrowLeft,
   Heart,
   Record,
+  XCircle,
 } from "@phosphor-icons/react";
 import { COLOR_SCHEMA } from "../../utils/constants";
 import MessagesList from "./MessagesList";
@@ -100,8 +101,18 @@ const ChatRoom = () => {
           <button
             type="button"
             onClick={() => join({ rid: currentRoom?._id, uid: auth?._id })}
+            className="button__orange"
           >
             {isJoining ? <Loader height={20} width={20} /> : "Rejoindre"}
+          </button>
+          <button
+            type="button"
+            className="close"
+            onClick={() => {
+              setChatRoomVisibilityOnMobile(false);
+            }}
+          >
+            <XCircle size={25} fill="#FFF"></XCircle>
           </button>
         </div>
       )}
