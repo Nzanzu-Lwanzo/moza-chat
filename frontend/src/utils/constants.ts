@@ -1,6 +1,6 @@
 import { Record } from "@phosphor-icons/react";
 
-let RUNENV: "dev" | "prod" = "dev";
+let RUNENV: "dev" | "prod" = "prod";
 
 const MAP_ENV_TO_ORIGIN: Record<"dev" | "prod", string> = {
   dev: "http://localhost:5000",
